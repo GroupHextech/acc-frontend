@@ -6,7 +6,7 @@
         <li class="breadcrumb-item"><a href="#">Owner</a></li>
         <li class="breadcrumb-item"><a href="#">Vehicle</a></li>
         <li class="breadcrumb-item active" aria-current="page">
-          Chassis 10000076 
+          Chassis 10000076
         </li>
       </ol>
     </nav>
