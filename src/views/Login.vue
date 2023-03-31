@@ -16,7 +16,7 @@
                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="checkLabel">Remember me</label>
                 </div>
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="submit" class="btn btn-primary">Sign in</button>
             </form>
         </div>
     </div>
@@ -38,7 +38,9 @@
 .form-check {
     text-align: center;
 }
-.btn {
+.btn, .btn-primary {
     min-width: 100%;
+    background-color: rgb(10, 26, 92);
+    border: rgb(10, 26, 92);
 }
 </style>
