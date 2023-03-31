@@ -1,18 +1,20 @@
 <template>
-    <form action="/pagina-processa-dados-do-form" method="post">
-    <div>
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" />
+    <div class="container">
+        <h2 class="page-title">Login</h2>
+        <form method="post">
+            <div>
+                <input type="text" name="username" id="username" placeholder="username" />
+            </div>
+            <div>
+                <input type="password" name="password" id="password" placeholder="password" />
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary">
+                    Login
+                </button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" />
-    </div>
-    <div>
-        <label for="msg">Mensagem:</label>
-        <textarea id="msg"></textarea>
-    </div>
-</form>
 </template>
 
 <script setup lang="ts"></script>
