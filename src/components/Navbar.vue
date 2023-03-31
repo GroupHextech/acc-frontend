@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="textoNavbar">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">Profiles<!--span class="sr-only">(Página atual)</span--></a>
+          <a class="nav-link" href="#">Profiles</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">
@@ -26,18 +26,47 @@
           <a class="nav-link">Service Bulletins</a>
         </li>
       </ul>
-      <span class="navbar-text"><router-link to="/">
-          <button type="button" class="btn btn-outline-light btn-sm">
-            Sign out
-          </button>
-        </router-link>
-
+      <span>
+        <!--router-link v-if="!isLoggedIn" class="nav-link" to="/">Login</router-link-->
+        <button v-if="isLoggedIn" class="btn btn-outline-light btn-sm " @click="logout">Sign out</button>
       </span>
     </div>
   </nav>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+export default defineComponent({
+  name: 'Navbar',
+  setup() {
+    const route = useRoute()
+    const router = useRouter()
+
+    const isLoggedIn = computed(() => {
+      // Verifica se o usuário está na rota de login
+      if (route.name === 'login') {
+        return false
+      }
+      // Verificação se o usuário está logado
+      return true
+    })
+
+    function logout() {
+
+      // Processo de logout
+
+      // Redireciona para a página de login
+      router.push({ name: 'login' })
+    }
+    
+    return {
+      isLoggedIn,
+      logout,
+    }
+  },
+})
 </script>
 
 <style scoped></style>
