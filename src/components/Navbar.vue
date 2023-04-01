@@ -10,7 +10,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="textoNavbar">
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto" v-if="isLoggedIn">
         <li class="nav-item">
           <a class="nav-link" href="#">Profiles</a>
         </li>
