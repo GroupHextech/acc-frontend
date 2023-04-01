@@ -15,9 +15,8 @@
           <a class="nav-link" href="#">Profiles</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <router-link to="/vehicle">Vehicles</router-link>
-          </a>
+          <a class="nav-link" href="#"
+            ><router-link to="/vehicle">Vehicles</router-link></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Rules</a>
