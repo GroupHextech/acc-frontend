@@ -15,7 +15,7 @@
         <thead class="thead-dark">
           <tr>
             <th>Service Bulletins</th>
-            <th>Incorporeted</th>
+            <th>Incorporated</th>
             <th>Not Applicable</th>
             <th>Applicable</th>
           </tr>

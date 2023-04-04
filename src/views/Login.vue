@@ -67,15 +67,15 @@
                         <form>
                             <div class="mb-3">
                                 <label for="username" class="visually-hidden">Username</label>
-                                <input type="text" class="form-control" id="username" v-model="username"
+                                <input type="text" class="form-control form-control-lg" id="username" v-model="username"
                                     placeholder="username">
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="visually-hidden">Password</label>
-                                <input type="password" class="form-control" id="password" v-model="password"
+                                <input type="password" class="form-control form-control-lg" id="password" v-model="password"
                                     placeholder="password">
                             </div>
-                            <button type="submit" class="btn btn-primary w-100" @click.prevent="login">Sign in</button>
+                            <button type="submit" class="btn btn-primary btn-lg w-100" @click.prevent="login">Sign in</button>
                         </form>
                     </div>
                 </div>
