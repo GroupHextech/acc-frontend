@@ -2,6 +2,11 @@
     <div class="container">
         <div class="chassis-list">
             <h2 class="page-title">Chassis</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">chassis</li>
+                </ol>
+            </nav>
             <div class="row">
                 <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.id">
                     <div class="chassis-card card shadow">
@@ -46,10 +51,12 @@ export default {
     max-width: auto;
     margin: 0;
 }
+
 .card {
     padding: 0;
     margin: 0;
 }
+
 .chassis-card {
     margin-bottom: 20px;
     padding: 10px;

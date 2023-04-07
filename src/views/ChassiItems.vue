@@ -3,9 +3,9 @@
         <h2 class="page-title">Chassi {{ chassi }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">chassis</a></li>
+                <li class="breadcrumb-item"><router-link to="/chassis">chassis</router-link></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    {{ chassi }}
+                    {{ chassi }} / items
                 </li>
             </ol>
         </nav>
