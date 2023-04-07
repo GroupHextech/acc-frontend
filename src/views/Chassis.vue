@@ -1,0 +1,70 @@
+<template>
+    <div class="container">
+        <div class="chassis-list">
+            <h2 class="page-title">Chassis</h2>
+            <div class="row">
+                <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.id">
+                    <div class="chassis-card card shadow">
+                        <h6>{{ chassi.id }}</h6>
+                        <div class="d-flex flex-row justify-content-end">
+                            <router-link :to="'/chassis/' + chassi.id + '/sb'">
+                                <button type="button" class="btn btn-outline-primary btn-sm mr-2">Service Bulletins</button>
+                            </router-link>
+                            <router-link :to="'/chassis/' + chassi.id + '/items'">
+                                <button type="button" class="btn btn-outline-primary btn-sm">Items</button>
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+export default {
+    data() {
+        return {
+            chassisList: [
+                { id: '10000076' },
+                { id: '10000077' },
+                { id: '10000078' },
+                { id: '10000079' },
+                { id: '10000080' },
+                { id: '10000081' },
+                { id: '10000082' },
+                { id: '10000083' },
+                { id: '10000084' },
+            ],
+        };
+    },
+};
+</script>
+
+<style scoped>
+.chassis-list {
+    max-width: auto;
+    margin: 0;
+}
+.card {
+    padding: 0;
+    margin: 0;
+}
+.chassis-card {
+    margin-bottom: 20px;
+    padding: 10px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    border-radius: 5px;
+}
+
+.btn-outline-primary {
+    border-color: #bbb;
+    color: #111;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0A1A5C;
+    color: #fff;
+}
+</style>
