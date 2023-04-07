@@ -58,7 +58,7 @@ export default defineComponent({
 
             if (validUser) {
                 // Redireciona o usuário para a página de Veículo
-                router.push({ name: 'vehicle' })
+                router.push({ name: 'chassi-sb', params: { chassi: '10000076' }})
             } else {
                 alert('Username or password is invalid')
             }

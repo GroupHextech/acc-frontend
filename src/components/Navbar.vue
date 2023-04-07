@@ -16,13 +16,14 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"
-            ><router-link to="/vehicle">Vehicles</router-link></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Rules</a>
+            ><router-link to="/chassis">Chassis</router-link></a>
         </li>
         <li class="nav-item">
           <a class="nav-link">Service Bulletins</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <router-link to="/items">Items</router-link></a>
         </li>
       </ul>
       <span>

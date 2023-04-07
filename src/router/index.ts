@@ -1,22 +1,40 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Vehicle from '../views/Vehicle.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Chassis from '../views/Chassis.vue'
+import ChassiSB from '../views/ChassiSB.vue'
+import ChassiItems from '../views/ChassiItems.vue'
 import Login from '../views/Login.vue'
 
 // createWebHistory(import.meta.env.BASE_URL),
+
+const routes: Array<RouteRecordRaw> = [
+    {
+        path: '/',
+        name:  'login',
+        component: Login
+    },
+    {
+        path: '/chassis',
+        name: 'chassis',
+        component: Chassis,
+        props: true
+    },
+    {
+        path: '/chassis/:chassi/sb',
+        name: 'chassi-sb',
+        component: ChassiSB,
+        props: true
+    },
+    {
+        path: '/chassis/:chassi/items',
+        name: 'chassi-items',
+        component: ChassiItems,
+        props: true
+    }
+];
+
 const router = createRouter({
     history: createWebHistory(),
-    routes: [
-        {
-            path: '/',
-            name:  'login',
-            component: Login
-        },
-        {
-            path: '/vehicle',
-            name:  'vehicle',
-            component: Vehicle
-        }
-    ]
-})
+    routes,
+});
 
 export default router
