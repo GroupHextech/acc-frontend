@@ -66,8 +66,9 @@ export default {
 }
 
 .btn-outline-primary {
-    border-color: #bbb;
-    color: #111;
+    background-color: #fff;
+    border: none;
+    color: #0A1A5C;
 }
 
 .btn-outline-primary:hover {
