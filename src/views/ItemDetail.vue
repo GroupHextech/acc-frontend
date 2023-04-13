@@ -14,7 +14,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useStore } from '../store';
 import { useItemsStore } from '../store/items';
 
 export default defineComponent({
@@ -30,11 +29,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore();
-
-    const name = store.selectedItemName;
-
-    return { name };
+    return { 
+     };
   },
   computed: {
     selectedItemName() {

@@ -14,7 +14,7 @@
 import { defineComponent } from "vue";
 import ItemList from "../components/ItemList.vue";
 import { Item } from '../types'
-import { useStore } from '../store'
+import { useItemsStore } from '../store/items';
 
 export default defineComponent({
   name: "ItemsPage",
@@ -35,10 +35,10 @@ export default defineComponent({
     },
   },
   setup() {
-    const store = useStore();
+    const itemsStore = useItemsStore();
 
     function selectItem(name: string) {
-      store.setSelectedItemName(name);
+      itemsStore.setSelectedItemName(name);
     }
 
     return { selectItem };
