@@ -28,7 +28,7 @@
                                 <td id="item-status" v-else>
                                     <i class="pi pi-times" style="color: red"></i>
                                 </td>
-                                <td class="col2" id="item-id">{{ item.id }}</td>
+                                <td class="col2" id="item-id">{{ item.name }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -52,19 +52,23 @@ export default defineComponent({
   setup(props) {
     const items = reactive([
       {
-        id: 'Airbag',
+        id: 1,
+        name: 'Airbag',
         itemStatus: true
       },
       {
-        id: 'Volante',
+        id: 2,
+        name: 'Volante',
         itemStatus: true
       },
       {
-        id: 'Vidro elétrico',
+        id: 3,
+        name: 'Vidro elétrico',
         itemStatus: false
       },
       {
-        id: 'Freio à disco',
+        id: 4,
+        name: 'Freio à disco',
         itemStatus: true
       }
     ]);
