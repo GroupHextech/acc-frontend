@@ -5,7 +5,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link to="/items">items</router-link></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    item?{{ id }}
+                    {{ selectedItemName }}
                 </li>
             </ol>
         </nav>

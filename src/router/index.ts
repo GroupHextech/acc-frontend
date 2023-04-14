@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     props: true,
   },
   {
-    path: "/items/item?:id",
+    path: "/items/item?id=:id",
     name: "ItemDetail",
     component: ItemDetail,
     props: true,
