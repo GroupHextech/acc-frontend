@@ -10,6 +10,9 @@
                 </div>
             </router-link>
         </div>
+        <div class="add-item">
+            <button class="btn btn-primary w-100">+ Add item</button>
+        </div>
     </div>
 </template>
 
@@ -56,5 +59,8 @@ export default defineComponent({
 
 .search {
     margin: 20px 0;
+}
+.add-item {
+    margin-bottom: 20px;
 }
 </style>
