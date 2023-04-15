@@ -16,22 +16,27 @@ import ItemList from "../components/ItemList.vue";
 import { Item } from '../types'
 import { useItemsStore } from '../store/items';
 
+import axios from "axios";
+
 export default defineComponent({
   name: "ItemsPage",
   components: {
     ItemList,
   },
-  data() { 
+  data() {
     return {}
   },
   computed: {
     items(): Item[] {
-      return [
+      return [];
+
+  /*  return [
         { id: 1, name: "Airbag" },
         { id: 2, name: "Volante" },
         { id: 3, name: "Vidro elétrico" },
         { id: 4, name: "Freio à disco" },
-      ] as Item[];
+      ] as Item[]; */
+
     },
   },
   setup() {
@@ -42,6 +47,14 @@ export default defineComponent({
     }
 
     return { selectItem };
-  }
+  },
+  async created() {
+    try {
+      const response = await axios.get<Item[]>("/api/items"); // url do endpoint
+      this.items = response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 });
 </script>

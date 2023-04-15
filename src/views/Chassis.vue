@@ -8,11 +8,11 @@
         </ol>
       </nav>
       <div class="row">
-        <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.id">
+        <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.chassi_id">
           <div class="chassis-card card shadow">
-            <h6>{{ chassi.id }}</h6>
+            <h6>{{ chassi.chassi_id }}</h6>
             <div class="d-flex flex-row justify-content-end">
-              <router-link :to="'/chassis/' + chassi.id + '/sb'">
+              <router-link :to="'/chassis/' + chassi.chassi_id + '/sb'">
                 <button
                   type="button"
                   class="btn btn-outline-primary btn-sm mr-2"
@@ -20,7 +20,7 @@
                   Service Bulletins
                 </button>
               </router-link>
-              <router-link :to="'/chassis/' + chassi.id + '/items'">
+              <router-link :to="'/chassis/' + chassi.chassi_id + '/items'">
                 <button type="button" class="btn btn-outline-primary btn-sm">
                   Items
                 </button>
@@ -34,23 +34,25 @@
 </template>
 
 <script lang="ts">
+import { Chassi } from '../types'
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      chassisList: [
-        { id: "10000076" },
-        { id: "10000077" },
-        { id: "10000078" },
-        { id: "10000079" },
-        { id: "10000080" },
-        { id: "10000081" },
-        { id: "10000082" },
-        { id: "10000083" },
-        { id: "10000084" },
-      ],
-    };
+      chassisList: [] as Chassi[],
+    }
   },
-};
+  mounted() {
+    axios.get('/chassi/list')
+      .then((response) => {
+        this.chassisList = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
+}
 </script>
 
 <style scoped>

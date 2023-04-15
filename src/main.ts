@@ -7,9 +7,9 @@ import router from './router'
 import 'primeicons/primeicons.css';
 import { createPinia } from 'pinia';
 
-//import axios from 'axios';
+import axios from 'axios';
 
-//axios.defaults.baseURL = 'localhost:5173';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 const app = createApp(App)
 const pinia = createPinia();
