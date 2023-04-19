@@ -20,23 +20,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="sb in serviceBulletins" :key="sb.id">
-            <th id="column-1">{{ sb.id }}</th>
+          <tr v-for="sb in serviceBulletins" :key="sb.service_bulleti_name">
+            <th id="column-1">{{ sb.service_bulleti_name }}</th>
             <!-- Incorporated -->
-            <td v-if="sb.incorporated === true">
+            <td v-if="sb.status === 'INCOPORATED' || sb.status === 'INCORPORATED' || sb.status === 'INCORP'">
               <i class="pi pi-check" style="color: green"></i>
             </td>
-            <td v-else-if="sb.applicable === true">
+            <td v-else-if="sb.status === 'APPLICABLE'">
               <a href="#" @click="confirmChangeCheck(sb)"><i class="pi pi-circle check"></i></a>
             </td>
             <td v-else></td>
             <!-- Not Applicable -->
-            <td v-if="sb.notApplicable === true">
+            <td v-if="sb.status === 'NOT APPLICABLE'">
               <i class="pi pi-check" style="color: green"></i>
             </td>
             <td v-else></td>
             <!-- Applicable -->
-            <td v-if="sb.applicable === true">
+            <td v-if="sb.status === 'APPLICABLE'">
               <i class="pi pi-check" style="color: green"></i>
             </td>
             <td v-else></td>
@@ -48,8 +48,10 @@
 </template>
   
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { ServiceBulletins } from '../types';
 
 export default defineComponent({
   props: {
@@ -60,32 +62,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const serviceBulletins = reactive([
-      {
-        id: "SB FAT-00-CG10",
-        incorporated: true,
-        notApplicable: false,
-        applicable: false,
-      },
-      {
-        id: "SB FAT-00-CG11",
-        incorporated: false,
-        notApplicable: true,
-        applicable: false,
-      },
-      {
-        id: "SB FAT-00-CG12",
-        incorporated: true,
-        notApplicable: false,
-        applicable: false,
-      },
-      {
-        id: "SB FAT-00-CG13",
-        incorporated: false,
-        notApplicable: false,
-        applicable: true,
-      },
-    ]);
 
     const confirmChangeCheck = (sb: any) => {
       Swal.fire({
@@ -110,17 +86,33 @@ export default defineComponent({
     };
 
     return {
-      serviceBulletins,
       confirmChangeCheck,
       changeCheck,
     };
   },
 
-  methods: {},
+  data() {
+    return {
+      serviceBulletins: [] as ServiceBulletins[],
+    }
+  },
+
+  mounted() {
+    axios.get("/bulletins/listar/" + this.chassi)
+      .then((response) => {
+        this.serviceBulletins = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 });
 </script>
 
 <style>
+.container {
+  padding-bottom: 20px;
+}
 .pi-circle {
   color: #bbb;
 }

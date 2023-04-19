@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Chassis from "../views/Chassis.vue";
-import ChassiSB from "../views/ChassiSB.vue";
-import ChassiItems from "../views/ChassiItems.vue";
+import ChassiSB from '../views/ChassiSB.vue';
+import ChassiItems from '../views/ChassiItems.vue';
 import Login from "../views/Login.vue";
 import Items from "../views/Items.vue";
 import ItemDetail from "../views/ItemDetail.vue";
+import RegisterChassi from "../views/RegisterChassi.vue";
 
 // createWebHistory(import.meta.env.BASE_URL),
 
@@ -43,6 +44,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "chassi-items",
     component: ChassiItems,
     props: true,
+  },
+  {
+    path: "/register/chassi",
+    name: "register-chassi",
+    component: RegisterChassi,
   },
 ];
 

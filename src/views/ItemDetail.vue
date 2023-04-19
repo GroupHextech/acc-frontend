@@ -19,11 +19,11 @@ import { useItemsStore } from '../store/items';
 export default defineComponent({
   name: "ItemDetail",
   props: {
-    id: {
+    id_item: {
       type: Number,
       required: true
     },
-    name: {
+    name_item: {
       type: String,
       required: true
     }

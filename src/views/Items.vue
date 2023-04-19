@@ -24,18 +24,20 @@ export default defineComponent({
     ItemList,
   },
   data() {
-    return {}
+    return {
+    items: [] as Item[],
+  }
   },
   computed: {
     items(): Item[] {
       return [];
 
-  /*  return [
-        { id: 1, name: "Airbag" },
-        { id: 2, name: "Volante" },
-        { id: 3, name: "Vidro elétrico" },
-        { id: 4, name: "Freio à disco" },
-      ] as Item[]; */
+      /*  return [
+            { id: 1, name: "Airbag" },
+            { id: 2, name: "Volante" },
+            { id: 3, name: "Vidro elétrico" },
+            { id: 4, name: "Freio à disco" },
+          ] as Item[]; */
 
     },
   },
@@ -50,8 +52,9 @@ export default defineComponent({
   },
   async created() {
     try {
-      const response = await axios.get<Item[]>("/api/items"); // url do endpoint
+      const response = await axios.get<Item[]>("/item/listall"); // url do endpoint
       this.items = response.data;
+      console.log(this.items);
     } catch (error) {
       console.error(error);
     }

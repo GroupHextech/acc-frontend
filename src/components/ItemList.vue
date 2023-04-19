@@ -3,10 +3,10 @@
         <div class="search bg-light rounded-pill">
             <input v-model="searchText" type="text" class="form-control form-control-lg" placeholder="Pesquisar..." />
         </div>
-        <div v-for="item in filteredItems" :key="item.id" class="card shadow-sm shadow">
-            <router-link :to="{ name: 'ItemDetail', params: { id: item.id } }" @click="selectItem(item.name)">
+        <div v-for="item in filteredItems" :key="item.id_item" class="card shadow-sm shadow">
+            <router-link :to="{ name: 'ItemDetail', params: { id: item.id_item } }" @click="selectItem(item.name_item)">
                 <div class="card-body">
-                    <h6>{{ item.name }}</h6>
+                    <h6>{{ item.name_item }}</h6>
                 </div>
             </router-link>
         </div>
@@ -39,7 +39,7 @@ export default defineComponent({
         filteredItems(): Item[] {
             if (!this.searchText) return this.items;
             return this.items.filter(item =>
-                item.name.toLowerCase().includes(this.searchText.toLowerCase())
+                item.name_item.toLowerCase().includes(this.searchText.toLowerCase())
             );
         },
     },

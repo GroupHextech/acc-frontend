@@ -13,10 +13,7 @@
             <h6>{{ chassi.chassi_id }}</h6>
             <div class="d-flex flex-row justify-content-end">
               <router-link :to="'/chassis/' + chassi.chassi_id + '/sb'">
-                <button
-                  type="button"
-                  class="btn btn-outline-primary btn-sm mr-2"
-                >
+                <button type="button" class="btn btn-outline-primary btn-sm mr-2">
                   Service Bulletins
                 </button>
               </router-link>
