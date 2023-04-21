@@ -5,7 +5,7 @@ export interface Item {
   
   id_item: number;
   name_item: string;
-  //item_dtregister: Date
+  //item_dtregister: string;
 }
 export interface Chassi {
   chassi_id: number;

@@ -14,6 +14,7 @@
         <thead class="thead-dark">
           <tr>
             <th id="service-bulletins">Service Bulletins</th>
+            <th id="part">Part</th>
             <th id="incorporated">Incorporated</th>
             <th id="not-applicable">Not Applicable</th>
             <th id="applicable">Applicable</th>
@@ -22,6 +23,7 @@
         <tbody>
           <tr v-for="sb in serviceBulletins" :key="sb.service_bulleti_name">
             <th id="column-1">{{ sb.service_bulleti_name }}</th>
+            <td id="column-2">{{ sb.part }}</td>
             <!-- Incorporated -->
             <td v-if="sb.status === 'INCOPORATED' || sb.status === 'INCORPORATED' || sb.status === 'INCORP'">
               <i class="pi pi-check" style="color: green"></i>
