@@ -21,11 +21,11 @@ export default defineComponent({
   props: {
     id_item: {
       type: Number,
-      required: true
+      //required: true
     },
     name_item: {
       type: String,
-      required: true
+      //required: true
     }
   },
   setup(props) {

@@ -1,9 +1,11 @@
-<template >
+<template>
   <div class="container">
     <h2 class="page-title">Chassi {{ chassi }}</h2>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link to="/chassis">chassis</router-link></li>
+        <li class="breadcrumb-item">
+          <router-link to="/chassis">chassis</router-link>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">
           {{ chassi }} / sb
         </li>
@@ -25,11 +27,19 @@
             <th id="column-1">{{ sb.service_bulleti_name }}</th>
             <td id="column-2">{{ sb.part }}</td>
             <!-- Incorporated -->
-            <td v-if="sb.status === 'INCOPORATED' || sb.status === 'INCORPORATED' || sb.status === 'INCORP'">
+            <td
+              v-if="
+                sb.status === 'INCOPORATED' ||
+                sb.status === 'INCORPORATED' ||
+                sb.status === 'INCORP'
+              "
+            >
               <i class="pi pi-check" style="color: green"></i>
             </td>
             <td v-else-if="sb.status === 'APPLICABLE'">
-              <a href="#" @click="confirmChangeCheck(sb)"><i class="pi pi-circle check"></i></a>
+              <a href="#" @click="confirmChangeCheck(sb)"
+                ><i class="pi pi-circle check"></i
+              ></a>
             </td>
             <td v-else></td>
             <!-- Not Applicable -->
@@ -46,14 +56,18 @@
         </tbody>
       </table>
     </div>
+    <div v-if="isLoading">
+      <loading />
+    </div>
   </div>
 </template>
-  
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { ServiceBulletins } from '../types';
+import { ServiceBulletins } from "../types";
+import Loading from "../components/Loading.vue";
 
 export default defineComponent({
   props: {
@@ -62,9 +76,10 @@ export default defineComponent({
       required: true,
     },
   },
-
+  components: {
+    Loading,
+  },
   setup(props) {
-
     const confirmChangeCheck = (sb: any) => {
       Swal.fire({
         title: "Are you sure?",
@@ -96,24 +111,32 @@ export default defineComponent({
   data() {
     return {
       serviceBulletins: [] as ServiceBulletins[],
-    }
+      isLoading: true,
+    };
+  },
+  methods: {
+    async loadData() {
+      try {
+        this.isLoading = true;
+        const response = await axios.get("/bulletins/listar/" + this.chassi);
+        this.serviceBulletins = response.data;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 
   mounted() {
-    axios.get("/bulletins/listar/" + this.chassi)
-      .then((response) => {
-        this.serviceBulletins = response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+    this.loadData();
+  },
 });
 </script>
 
-<style>
+<style scoped>
 .container {
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 }
 .pi-circle {
   color: #bbb;

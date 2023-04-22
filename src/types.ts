@@ -15,3 +15,7 @@ export interface ServiceBulletins {
   status: string;
   part: string;
 }
+export interface ItemChassi {
+  name_item: string;
+  status: string;
+}

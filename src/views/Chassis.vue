@@ -7,13 +7,23 @@
           <li class="breadcrumb-item active" aria-current="page">chassis</li>
         </ol>
       </nav>
+      <div v-if="isLoading">
+        <loading />
+      </div>
       <div class="row">
-        <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.chassi_id">
+        <div
+          class="col-md-4"
+          v-for="chassi in chassisList"
+          :key="chassi.chassi_id"
+        >
           <div class="chassis-card card shadow">
             <h6>{{ chassi.chassi_id }}</h6>
             <div class="d-flex flex-row justify-content-end">
               <router-link :to="'/chassis/' + chassi.chassi_id + '/sb'">
-                <button type="button" class="btn btn-outline-primary btn-sm mr-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm mr-2"
+                >
                   Service Bulletins
                 </button>
               </router-link>
@@ -31,25 +41,37 @@
 </template>
 
 <script lang="ts">
-import { Chassi } from '../types'
-import axios from 'axios';
+import { Chassi } from "../types";
+import axios from "axios";
+import Loading from "../components/Loading.vue";
 
 export default {
+  components: {
+    Loading,
+  },
   data() {
     return {
       chassisList: [] as Chassi[],
-    }
+      isLoading: true,
+    };
+  },
+  methods: {
+    async loadData() {
+      try {
+        this.isLoading = true;
+        const response = await axios.get("/chassi/list");
+        this.chassisList = response.data;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
   mounted() {
-    axios.get('/chassi/list')
-      .then((response) => {
-        this.chassisList = response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    this.loadData();
   },
-}
+};
 </script>
 
 <style scoped>
