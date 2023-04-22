@@ -1,52 +1,71 @@
 <template>
-    <div class="container">
-        <form @submit.prevent="sendData" ref="form">    
-            <div
-            class="dropzone-container"
-            @dragover="dragover"
-            @dragleave="dragleave"
-            @drop="drop"
-            >
-            <input
-                type="file"
-                multiple
-                name="file"
-                id="fileInput"
-                class="hidden-input"
-                @change="onChange"
-                ref="file"
-                accept=".csv,.xlsx"
-            />
+  <div class="container">
+    <h2 class="page-title">Register chassis</h2>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link to="/chassis">chassi</router-link>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          register
+        </li>
+      </ol>
+    </nav>
+    <form @submit.prevent="sendData" ref="form">
+      <div
+        class="dropzone-container"
+        @dragover="dragover"
+        @dragleave="dragleave"
+        @drop="drop"
+      >
+        <input
+          type="file"
+          multiple
+          name="file"
+          id="fileInput"
+          class="hidden-input"
+          @change="onChange"
+          ref="file"
+          accept=".csv,.xlsx"
+        />
 
-            <label for="fileInput" class="file-label">
-                <div v-if="isDragging" class="file-label-text">Drag files here</div>
-                <div v-else class="file-label-text">Drag files here or <u>click here</u> to upload</div>
-            </label>
+        <label for="fileInput" class="file-label">
+          <div v-if="isDragging" class="file-label-text">Drag files here</div>
+          <div v-else class="file-label-text">
+            Drag files here or <u>click here</u> to upload
+          </div>
+        </label>
 
-            <div class="preview-container mt-4" v-if="files.length">
-                <div v-for="file in files" :key="file.name" class="preview-card">
-                <div>
-                    <img alt="excel-logo" class="preview-img" :src="excel" />
-                    <p>
-                        {{ file.name }} 
-                        ({{ Math.round(file.size / 1000) + "kb" }})
-                    </p>
-                </div>
-                <div>
-                    <button
-                    class="ml-2 btn btn-primary"
-                    type="button"
-                    @click="remove(files.indexOf(file))"
-                    title="Remove file"
-                    >
-                    <b>×</b>
-                    </button>
-                </div>
-                </div>
+        <div class="preview-container mt-4" v-if="files.length">
+          <div v-for="file in files" :key="file.name" class="preview-card">
+            <div>
+              <img alt="excel-logo" class="preview-img" :src="excel" />
+              <p>
+                {{ file.name }}
+                ({{ Math.round(file.size / 1000) + "kb" }})
+              </p>
             </div>
+            <div>
+              <button
+                class="ml-2 btn btn-primary"
+                type="button"
+                @click="remove(files.indexOf(file))"
+                title="Remove file"
+              >
+                <b>×</b>
+              </button>
             </div>
-            <button v-if="this.files.length !== 0" type="submit" class="submit btn btn-primary">Submit</button>
-        </form>    
+          </div>
+        </div>
+      </div>
+      <button
+        v-if="this.files.length !== 0"
+        type="submit"
+        class="submit btn btn-primary"
+      >
+        Submit
+      </button>
+    </form>
   </div>
 </template>
 
@@ -104,7 +123,7 @@ export default {
         };
         reader.readAsBinaryString(file);
         };
-    
+
     },
     dragover(e) {
       e.preventDefault();
@@ -124,7 +143,7 @@ export default {
     },
     sendData() {
         if (this.files.length > 0) {
-            
+
             this.filesJSON.forEach(data => {
                 const jsonData = JSON.stringify(data);
                 console.log(jsonData);
@@ -134,7 +153,7 @@ export default {
                     'Content-Type': 'application/json'
                     }
                 });
-            });     
+            });
             // resetar o valor do input
             this.$refs.file.value = null;
             this.files = [];

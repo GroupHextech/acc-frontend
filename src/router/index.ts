@@ -46,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
     props: true,
   },
   {
-    path: "/register/chassi",
+    path: "/chassis/register",
     name: "register-chassi",
     component: RegisterChassi,
   },

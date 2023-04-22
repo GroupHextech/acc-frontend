@@ -35,7 +35,7 @@
           >
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="#">
-            <router-link to="/register/chassi">Register</router-link></a
+            <router-link to="/chassis/register">Register</router-link></a
           >
           </div>
         </li>
@@ -95,5 +95,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>
