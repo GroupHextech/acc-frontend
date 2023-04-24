@@ -5,14 +5,15 @@ import './style.css'
 import App from './App.vue'
 import router from './router'
 import 'primeicons/primeicons.css';
+import { createPinia } from 'pinia';
 
-//import axios from 'axios';
+import axios from 'axios';
 
-//axios.defaults.baseURL = 'localhost:5173';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 const app = createApp(App)
-
-//app.use(createPinia())
+const pinia = createPinia();
 
 app.use(router)
+app.use(pinia)
 app.mount('#app')
