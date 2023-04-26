@@ -1,29 +1,27 @@
 <template>
   <div class="container">
     <div class="chassis-list">
-      <h2 class="page-title">Chassis</h2>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active" aria-current="page">chassis</li>
-        </ol>
-      </nav>
+      <section class="hero is-small">
+        <div class="hero-body">
+          <h1 class="title">Chassis</h1>
+          <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><router-link to="/chassis">chassis</router-link></li>
+          </ul>
+        </nav>
+        </div>
+      </section>
+      
       <div v-if="isLoading">
         <loading />
       </div>
       <div class="row">
-        <div
-          class="col-md-4"
-          v-for="chassi in chassisList"
-          :key="chassi.chassi_id"
-        >
+        <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.chassi_id">
           <div class="chassis-card card shadow">
             <h6>{{ chassi.chassi_id }}</h6>
             <div class="d-flex flex-row justify-content-end">
               <router-link :to="'/chassis/' + chassi.chassi_id + '/sb'">
-                <button
-                  type="button"
-                  class="btn btn-outline-primary btn-sm mr-2"
-                >
+                <button type="button" class="btn btn-outline-primary btn-sm mr-2">
                   Service Bulletins
                 </button>
               </router-link>
@@ -75,9 +73,8 @@ export default {
 </script>
 
 <style scoped>
-.chassis-list {
-  max-width: auto;
-  margin: 0;
+.title {
+  text-align: start;
 }
 
 .card {

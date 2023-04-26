@@ -1,39 +1,27 @@
 <template>
   <div>
-    <div class="row align-items-center">
-      <div class="col-md-8 mb-3 mb-md-0">
-        <div class="search bg-light rounded-pill h-100 d-flex align-items-center">
-          <input
-            v-model="searchText"
-            type="text"
-            class="form-control form-control-lg"
-            placeholder="Pesquisar..."
-          />
-        </div>
-      </div>
-      <div class="col-md-4 h-100">
-        <div class="add-item h-100">
-          <button class="btn btn-lg btn-primary w-100 h-100">+ Add item</button>
-        </div>
+    <div class="block">
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" v-model="searchText" type="text" placeholder="Search a item">
+        </p>
+        <p class="control">
+          <a class="button is-link">
+            + Add item
+          </a>
+        </p>
       </div>
     </div>
 
-    <div
-      v-for="item in filteredItems"
-      :key="item.id_item"
-      class="card shadow-sm shadow mt-3"
-    >
-      <router-link
-        :to="{ name: 'ItemDetail', params: { id: item.id_item } }"
-        @click="selectItem(item.name_item)"
-      >
+    <div class="block card shadow-sm shadow mt-3" v-for="item in filteredItems" :key="item.id_item">
+      <router-link :to="{ name: 'ItemDetail', params: { id: item.id_item } }" @click="selectItem(item.name_item)">
         <div class="card-body">
           <h6>{{ item.name_item }}</h6>
         </div>
       </router-link>
     </div>
 
-    <div v-if="isLoading">
+    <div class="block" v-if="isLoading">
       <loading />
     </div>
   </div>

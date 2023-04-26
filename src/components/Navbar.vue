@@ -1,65 +1,51 @@
 <template>
-  <nav
-    class="navbar navbar-expand-lg navbar-dark"
-    style="background-color: #0a1a5c"
-  >
-    <a class="navbar-brand" href="#">
-      <img
-        src="../assets/sedan-car-side-black-silhouette.svg"
-        width="30"
-        height="30"
-        class="d-inline-block align-top"
-        alt=""
-      />
+  <div>
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="#">
+      <img src="../assets/sedan-car-side-black-silhouette.svg" width="70" height="28">
       EMBRACAR
     </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#textoNavbar"
-      aria-controls="textoNavbar"
-      aria-expanded="false"
-      aria-label="Alterna navegação"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="textoNavbar">
-      <ul class="navbar-nav mr-auto" v-if="isLoggedIn">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Profile Type</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-            ><router-link to="/chassis">Chassis</router-link></a
-          >
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">
-            <router-link to="/chassis/register">Register</router-link></a
-          >
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link">Service Bulletins</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <router-link to="/items">Items</router-link></a
-          >
-        </li>
-      </ul>
-      <span>
-        <!--router-link v-if="!isLoggedIn" class="nav-link" to="/">Login</router-link-->
-        <button
-          v-if="isLoggedIn"
-          class="btn btn-outline-light btn-sm"
-          @click="logout"
-        >
-          Sign out
-        </button>
-      </span>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu" v-if="isLoggedIn">
+    <div class="navbar-start">
+      <a class="navbar-item">
+        Home
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <router-link class="navbar-link" to="/chassis">Chassis</router-link>
+
+        
+        <div class="navbar-dropdown">
+          <router-link class="navbar-item" to="/chassis/register">Add chassis</router-link>
+        </div>
+      </div>
+        <router-link class="navbar-item" to="/items">Items</router-link>
+      <a class="navbar-item">
+        Service Bulletins
+      </a>
     </div>
-  </nav>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-link is-light" @click="logout">
+            Sign out
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+  </div>
 </template>
 
 <script lang="ts">
@@ -68,6 +54,16 @@ import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Navbar",
+  mounted() {
+    $(document).ready(function() {
+      // Check for click events on the navbar burger icon
+      $(".navbar-burger").click(function() {
+          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+          $(".navbar-burger").toggleClass("is-active");
+          $(".navbar-menu").toggleClass("is-active");
+      });
+    });
+  },
   setup() {
     const route = useRoute();
     const router = useRouter();

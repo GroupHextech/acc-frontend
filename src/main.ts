@@ -1,11 +1,12 @@
 import { createApp } from 'vue'
-//import { createPinia } from 'pinia'
+import { createPinia } from 'pinia';
 
-import './style.css'
 import App from './App.vue'
 import router from './router'
+
+import './style.css'
 import 'primeicons/primeicons.css';
-import { createPinia } from 'pinia';
+import 'bulma/css/bulma.css';
 
 import axios from 'axios';
 

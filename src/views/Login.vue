@@ -1,43 +1,49 @@
 <template>
   <div class="container">
-    <h2 class="page-title text-center">Login</h2>
-    <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8 col-sm-10">
-        <div class="card shadow">
-          <div class="card-body">
-            <form>
-              <div class="mb-3">
-                <label for="username" class="visually-hidden">Username</label>
-                <input
-                  type="text"
-                  class="form-control form-control-lg"
-                  id="username"
-                  v-model="username"
-                  placeholder="username"
-                />
+    <section class="hero is-small">
+      <div class="hero-body">
+        <h1 class="title">Login</h1>
+        <section>
+          <div class="columns is-gapless is-multiline is-desktop">
+            <div class="column">
+            </div>
+            <div class="column is-half">
+              <div class="box">
+
+                <div class="field">
+                  <p class="control has-icons-left has-icons-right">
+                    <input class="input" type="email" placeholder="Username" v-model="username">
+                    <span class="icon is-small is-left">
+                      <i class="pi pi-user"></i>
+                    </span>
+                    <span class="icon is-small is-right">
+                      <i class="pi pi-check"></i>
+                    </span>
+                  </p>
+                </div>
+                <div class="field">
+                  <p class="control has-icons-left">
+                    <input class="input" type="password" placeholder="Password" v-model="password">
+                    <span class="icon is-small is-left">
+                      <i class="pi pi-lock"></i>
+                    </span>
+                  </p>
+                </div>
+                <div class="field">
+                  <p class="control">
+                    <button type="submit" class="button is-link" @click.prevent="login">
+                      Sign in
+                    </button>
+                  </p>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="password" class="visually-hidden">Password</label>
-                <input
-                  type="password"
-                  class="form-control form-control-lg"
-                  id="password"
-                  v-model="password"
-                  placeholder="password"
-                />
-              </div>
-              <button
-                type="submit"
-                class="btn btn-primary btn-lg w-100"
-                @click.prevent="login"
-              >
-                Sign in
-              </button>
-            </form>
+            </div>
+            <div class="column">
+            </div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -95,39 +101,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.card {
-  margin-top: 50px;
-  background: #e9ecef;
-}
-
-label.visually-hidden {
-  display: block;
-  height: 0;
-  width: 0;
-  overflow: hidden;
-  position: absolute;
-}
-
-input[type="username"]::before,
-input[type="password"]::before {
-  content: attr(label);
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #999;
-}
-
-.btn-primary {
-  background-color: rgb(10, 26, 92);
-  border-color: rgb(10, 26, 92);
-}
-
-.btn-primary:hover {
-  background-color: rgb(23, 53, 119);
-  border-color: rgb(23, 53, 119);
-}
-
-.alert {
-  margin-top: 1em;
-}
-</style>
+<style scoped></style>

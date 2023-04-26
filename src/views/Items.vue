@@ -1,12 +1,16 @@
 <template>
   <div class="container">
-    <h2 class="page-title">Items</h2>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">items</li>
-      </ol>
-    </nav>
-    <item-list :items="items" @update:items="items = $event" />
+    <section class="hero is-small">
+      <div class="hero-body">
+        <h1 class="title">Items</h1>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><router-link to="/items">items</router-link></li>
+          </ul>
+        </nav>
+        <item-list :items="items" @update:items="items = $event" />
+      </div>
+    </section>
   </div>
 </template>
 
@@ -31,5 +35,8 @@ export default defineComponent({
 <style scoped>
 .container {
   padding-bottom: 30px;
+}
+.title {
+  text-align: start;
 }
 </style>
