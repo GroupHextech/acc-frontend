@@ -1,40 +1,43 @@
 <template>
   <div class="container">
-    <div class="chassis-list">
-      <section class="hero is-small">
-        <div class="hero-body">
-          <h1 class="title">Chassis</h1>
-          <nav class="breadcrumb" aria-label="breadcrumbs">
+    <section class="hero is-small">
+      <div class="hero-body">
+        <h1 class="title">Chassis</h1>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/chassis">chassis</router-link></li>
           </ul>
         </nav>
+        <div v-if="isLoading">
+          <loading />
         </div>
-      </section>
-      
-      <div v-if="isLoading">
-        <loading />
-      </div>
-      <div class="row">
-        <div class="col-md-4" v-for="chassi in chassisList" :key="chassi.chassi_id">
-          <div class="chassis-card card shadow">
-            <h6>{{ chassi.chassi_id }}</h6>
-            <div class="d-flex flex-row justify-content-end">
-              <router-link :to="'/chassis/' + chassi.chassi_id + '/sb'">
-                <button type="button" class="btn btn-outline-primary btn-sm mr-2">
+        <div class="columns">
+          <div
+            class="column is-3"
+            v-for="chassi in chassisList"
+            :key="chassi.chassi_id"
+          >
+            <div class="card">
+              <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
+              <div class="buttons is-centered">
+                <router-link
+                  class="button is-light is-small"
+                  :to="'/chassis/' + chassi.chassi_id + '/sb'"
+                >
                   Service Bulletins
-                </button>
-              </router-link>
-              <router-link :to="'/chassis/' + chassi.chassi_id + '/items'">
-                <button type="button" class="btn btn-outline-primary btn-sm">
+                </router-link>
+                <router-link
+                  class="button is-light is-small"
+                  :to="'/chassis/' + chassi.chassi_id + '/items'"
+                >
                   Items
-                </button>
-              </router-link>
+                </router-link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -76,28 +79,12 @@ export default {
 .title {
   text-align: start;
 }
-
-.card {
-  padding: 0;
-  margin: 0;
+.columns:not(.is-desktop) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-
-.chassis-card {
-  margin-bottom: 20px;
-  padding: 10px;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  border-radius: 5px;
-}
-
-.btn-outline-primary {
-  background-color: #fff;
-  border: none;
-  color: #0a1a5c;
-}
-
-.btn-outline-primary:hover {
-  background-color: #0a1a5c;
-  color: #fff;
+.card{
+  padding: 0.5em;
 }
 </style>

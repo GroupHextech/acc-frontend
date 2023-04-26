@@ -9,33 +9,33 @@
             <li><router-link to="/chassis/:chassi/items">{{ chassi }} / items</router-link></li>
           </ul>
         </nav>
-      </div>
-      <!-- All content here -->
-      <div class="block">
-        <div class="row">
-          <div class="col-12" v-if="items.length">
-            <div v-for="item in items" :key="item.name_item" class="card shadow-sm shadow mt-3">
-              <div class="card-body d-flex align-items-center">
-                <h6 class="me-3 text-left">{{ item.name_item }}</h6>
-                <span v-if="item.status === 'INCORPORATED'" class="badge badge-success ml-auto">
-                  <i class="pi pi-check"></i> 
-                  {{ item.status }}
-                </span>
-                <span v-if="item.status === 'APPLICABLE'" class="badge badge-warning ml-auto">
-                  <i class="pi pi-lock"></i>
-                  {{ item.status }}
-                </span>
-                <span v-if="item.status === 'NOT APPLICABLE'" class="badge badge-danger ml-auto">
-                  <i class="pi pi-times"></i>
-                  {{ item.status }}
-                </span>
+        <!-- All content here -->
+        <div class="block">
+          <div class="row">
+            <div class="col-12" v-if="items.length">
+              <div v-for="item in items" :key="item.name_item" class="card shadow-sm shadow mt-3">
+                <div class="card-body d-flex align-items-center">
+                  <h6 class="me-3 text-left">{{ item.name_item }}</h6>
+                  <span v-if="item.status === 'INCORPORATED'" class="badge badge-success ml-auto">
+                    <i class="pi pi-check"></i> 
+                    {{ item.status }}
+                  </span>
+                  <span v-if="item.status === 'APPLICABLE'" class="badge badge-warning ml-auto">
+                    <i class="pi pi-lock"></i>
+                    {{ item.status }}
+                  </span>
+                  <span v-if="item.status === 'NOT APPLICABLE'" class="badge badge-danger ml-auto">
+                    <i class="pi pi-times"></i>
+                    {{ item.status }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="block" v-if="isLoading">
-        <loading />
+        <div class="block" v-if="isLoading">
+          <loading />
+        </div>
       </div>
     </section>
   </div>
@@ -93,6 +93,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.title {
+  text-align: start;
+}
 .badge {
   display: inline-block;
   margin-left: 10px

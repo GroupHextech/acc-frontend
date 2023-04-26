@@ -33,9 +33,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container {
-  padding-bottom: 30px;
-}
 .title {
   text-align: start;
 }
