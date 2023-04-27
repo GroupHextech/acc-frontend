@@ -8,7 +8,7 @@
             <li><router-link to="/items">items</router-link></li>
           </ul>
         </nav>
-        <item-list :items="items" @update:items="items = $event" />
+        <ItemList :items="items" @update:items="items = $event" />
       </div>
     </section>
   </div>

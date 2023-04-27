@@ -11,7 +11,7 @@ export interface Chassi {
   chassi_id: number;
 }
 export interface ServiceBulletins {
-  service_bulleti_name: number;
+  service_bulleti_name: string;
   status: string;
   part: string;
 }

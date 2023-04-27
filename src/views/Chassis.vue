@@ -21,13 +21,13 @@
               <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
               <div class="buttons is-centered">
                 <router-link
-                  class="button is-light is-small"
+                  class="button is-link is-light is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/sb'"
                 >
                   Service Bulletins
                 </router-link>
                 <router-link
-                  class="button is-light is-small"
+                  class="button is-link is-light is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/items'"
                 >
                   Items
@@ -86,5 +86,7 @@ export default {
 }
 .card{
   padding: 0.5em;
+  background-color: #f9f9f9;
+  border: 1px #eee solid
 }
 </style>

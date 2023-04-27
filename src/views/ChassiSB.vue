@@ -1,64 +1,68 @@
 <template>
   <div class="container">
-    <h2 class="page-title">Chassi {{ chassi }}</h2>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link to="/chassis">chassis</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          {{ chassi }} / sb
-        </li>
-      </ol>
-    </nav>
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead class="thead-dark">
-          <tr>
-            <th id="service-bulletins">Service Bulletins</th>
-            <th id="part">Part</th>
-            <th id="incorporated">Incorporated</th>
-            <th id="not-applicable">Not Applicable</th>
-            <th id="applicable">Applicable</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="sb in serviceBulletins" :key="sb.service_bulleti_name">
-            <th id="column-1">{{ sb.service_bulleti_name }}</th>
-            <td id="column-2">{{ sb.part }}</td>
-            <!-- Incorporated -->
-            <td
-              v-if="
-                sb.status === 'INCOPORATED' ||
-                sb.status === 'INCORPORATED' ||
-                sb.status === 'INCORP'
-              "
-            >
-              <i class="pi pi-check" style="color: green"></i>
-            </td>
-            <td v-else-if="sb.status === 'APPLICABLE'">
-              <a href="#" @click="confirmChangeCheck(sb)"
-                ><i class="pi pi-circle check"></i
-              ></a>
-            </td>
-            <td v-else></td>
-            <!-- Not Applicable -->
-            <td v-if="sb.status === 'NOT APPLICABLE'">
-              <i class="pi pi-check" style="color: green"></i>
-            </td>
-            <td v-else></td>
-            <!-- Applicable -->
-            <td v-if="sb.status === 'APPLICABLE'">
-              <i class="pi pi-check" style="color: green"></i>
-            </td>
-            <td v-else></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div v-if="isLoading">
-      <loading />
-    </div>
+    <section class="hero is-small">
+      <div class="hero-body">
+        <h1 class="title">Chassi {{ chassi }}</h1>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><router-link to="/chassis">chassis</router-link></li>
+            <li>
+              <router-link :to="'/chassis/' + chassi + '/sb'"
+                >{{ chassi }} / sb</router-link
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="content">
+          <table class="table is-hoverable">
+            <thead>
+              <tr>
+                <th title="Service Bulletins" id="service-bulletins">Service Bulletins</th>
+                <th title="Part" id="part">Part</th>
+                <th title="Incorporated" id="incorporated">Incorporated</th>
+                <th title="Not Applicable" id="not-applicable">Not Applicable</th>
+                <th title="Applicable" id="applicable">Applicable</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="sb in serviceBulletins" :key="sb.service_bulleti_name">
+                <th :title="sb.service_bulleti_name" id="serviceBulletin">{{ sb.service_bulleti_name }}</th>
+                <td id="part">{{ sb.part }}</td>
+                <!-- Incorporated -->
+                <td
+                  v-if="
+                    sb.status === 'INCOPORATED' ||
+                    sb.status === 'INCORPORATED' ||
+                    sb.status === 'INCORP'
+                  "
+                >
+                  <i class="pi pi-check" style="color: green"></i>
+                </td>
+                <td v-else-if="sb.status === 'APPLICABLE'">
+                  <a href="#" @click="confirmChangeCheck(sb)"
+                    ><i class="pi pi-circle check"></i
+                  ></a>
+                </td>
+                <td v-else></td>
+                <!-- Not Applicable -->
+                <td v-if="sb.status === 'NOT APPLICABLE'">
+                  <i class="pi pi-check" style="color: green"></i>
+                </td>
+                <td v-else></td>
+                <!-- Applicable -->
+                <td v-if="sb.status === 'APPLICABLE'">
+                  <i class="pi pi-check" style="color: green"></i>
+                </td>
+                <td v-else></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-if="isLoading">
+          <loading />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -135,8 +139,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container {
-  padding-bottom: 30px;
+.title {
+  text-align: start;
 }
 .pi-circle {
   color: #bbb;
@@ -144,16 +148,5 @@ export default defineComponent({
 
 .pi-circle:hover {
   color: #444;
-}
-
-.table-responsive {
-  border-radius: 5px;
-  background-color: #ccc;
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
-
-.table {
-  background-color: #e9ecef;
 }
 </style>

@@ -1,20 +1,26 @@
 <template>
-    <div class="container">
-        <h2 class="page-title">{{ selectedItemName }}</h2>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><router-link to="/items">items</router-link></li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    {{ selectedItemName }}
-                </li>
-            </ol>
+  <div class="container">
+    <section class="hero is-small">
+      <div class="hero-body">
+        <h1 class="title">{{ selectedItemName }}</h1>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><router-link to="/items">items</router-link></li>
+            <li><router-link :to="selectedItemName">{{ selectedItemName }}</router-link></li>
+          </ul>
         </nav>
-    </div>
+        <!-- All content here -->
+        <div class="content">
+          <i class="pi pi-wrench" style="font-size: 2rem"></i>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useItemsStore } from '../store/items';
+import { defineComponent } from "vue";
+import { useItemsStore } from "../store/items";
 
 export default defineComponent({
   name: "ItemDetail",
@@ -26,17 +32,22 @@ export default defineComponent({
     name_item: {
       type: String,
       //required: true
-    }
+    },
   },
   setup(props) {
-    return { 
-     };
+    return {};
   },
   computed: {
     selectedItemName() {
       const itemsStore = useItemsStore();
       return itemsStore.selectedItemName;
-    }
-  }
+    },
+  },
 });
 </script>
+
+<style scoped>
+.title {
+  text-align: start;
+}
+</style>
