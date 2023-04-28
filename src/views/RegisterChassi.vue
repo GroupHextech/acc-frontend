@@ -9,44 +9,44 @@
             <li><router-link to="/chassis/register">register</router-link></li>
           </ul>
         </nav>
-      </div>
-      <!-- All content here -->
-      <div class="block">
-        <form @submit.prevent="sendData" ref="form">
-          <div class="dropzone-container box has-background-white-bis" @dragover="dragover" @dragleave="dragleave"
-            @drop="drop">
-            <input type="file" multiple name="file" id="fileInput" class="hidden-input" @change="onChange" ref="file"
-              accept=".csv,.xlsx" />
-
-            <label for="fileInput" class="file-label">
-              <div v-if="isDragging" class="file-label-text">Drag files here</div>
-              <div v-else class="file-label-text">
-                Drag files here or <u>click here</u> to upload
-              </div>
-            </label>
-
-            <div class="preview-container mt-4" v-if="files.length">
-              <div v-for="file in files" :key="file.name" class="preview-card">
-                <div>
-                  <img alt="excel-logo" class="preview-img" :src="excel" />
-                  <p>
-                    {{ file.name }}
-                    ({{ Math.round(file.size / 1000) + "kb" }})
-                  </p>
+        <!-- All content here -->
+        <div class="block">
+          <form @submit.prevent="sendData" ref="form">
+            <div class="dropzone-container box has-background-white-bis" @dragover="dragover" @dragleave="dragleave"
+              @drop="drop">
+              <input type="file" multiple name="file" id="fileInput" class="hidden-input" @change="onChange" ref="file"
+                accept=".csv,.xlsx" />
+  
+              <label for="fileInput" class="file-label">
+                <div v-if="isDragging" class="file-label-text">Drag files here</div>
+                <div v-else class="file-label-text">
+                  Drag files here or <u>click here</u> to upload
                 </div>
-                <div>
-                  <button class="ml-2 btn btn-primary" type="button" @click="remove(files.indexOf(file))"
-                    title="Remove file">
-                    <i class="pi pi-times"></i>
-                  </button>
+              </label>
+  
+              <div class="preview-container mt-4" v-if="files.length">
+                <div v-for="file in files" :key="file.name" class="preview-card">
+                  <div>
+                    <img alt="excel-logo" class="preview-img" :src="excel" />
+                    <p>
+                      {{ file.name }}
+                      ({{ Math.round(file.size / 1000) + "kb" }})
+                    </p>
+                  </div>
+                  <div>
+                    <button class="ml-2 btn btn-primary" type="button" @click="remove(files.indexOf(file))"
+                      title="Remove file">
+                      <i class="pi pi-times"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <button v-if="this.files.length !== 0" type="submit" class="button is-link">
-            Submit
-          </button>
-        </form>
+            <button v-if="this.files.length !== 0" type="submit" class="button is-link">
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   </div>
@@ -154,7 +154,7 @@ export default {
 }
 
 .dropzone-container {
-  border: 2px dashed #aaa;
+  border: 2px dashed #485fc7;
   border-radius: 5px;
   padding: 2rem;
   margin: 2rem;
@@ -169,11 +169,11 @@ export default {
 }
 
 .dropzone-container .file-label-text {
-  color: #aaa;
+  color: #bbb;
 }
 
 .dropzone-container .file-label-text u {
-  color: #007aff;
+  color: #485fc7;
   text-decoration: none;
 }
 

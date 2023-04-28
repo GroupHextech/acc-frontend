@@ -101,4 +101,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.box{
+  padding: 0.5em;
+  background-color: #f9f9f9;
+  border: 1px #eee solid;
+}
+</style>

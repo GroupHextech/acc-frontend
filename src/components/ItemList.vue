@@ -1,24 +1,32 @@
 <template>
-  <div>
+  <div class="content">
     <div class="block">
       <div class="field is-grouped">
         <p class="control is-expanded">
-          <input class="input" v-model="searchText" type="text" placeholder="Search a item">
+          <input
+            class="input"
+            v-model="searchText"
+            type="text"
+            placeholder="Search a item"
+          />
         </p>
         <p class="control">
-          <a class="button is-link">
-            + Add item
-          </a>
+          <a class="button is-link"> + Add item </a>
         </p>
       </div>
     </div>
+    
 
-    <div class="block card shadow-sm shadow mt-3" v-for="item in filteredItems" :key="item.id_item">
-      <router-link :to="{ name: 'ItemDetail', params: { id: item.id_item } }" @click="selectItem(item.name_item)">
-        <div class="card-body">
-          <h6>{{ item.name_item }}</h6>
-        </div>
-      </router-link>
+    <div class="buttons">
+      <div class="control" v-for="item in filteredItems" :key="item.id_item">
+        <router-link
+          class="button is-link is-light is-rounded"
+          :to="{ name: 'ItemDetail', params: { id: item.id_item } }"
+          @click="selectItem(item.name_item)"
+        >
+          <p>{{ item.name_item }}</p>
+        </router-link>
+      </div>
     </div>
 
     <div class="block" v-if="isLoading">
@@ -86,17 +94,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.card {
-  margin: 0 0 20px 0;
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-
-.search {
-  margin: 20px 0;
-}
-
-@media (max-width: 767.98px) {
-  .search {
-    margin-bottom: 0.2rem;
-  }
+.control {
+  padding-inline: 0.2rem;
 }
 </style>

@@ -21,7 +21,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #ccc;
+  background-color: #485fc7;
   animation: loading 1s infinite ease-in-out;
 }
 

@@ -6,36 +6,63 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/chassis">chassis</router-link></li>
-            <li><router-link to="/chassis/:chassi/items">{{ chassi }} / items</router-link></li>
+            <li>
+              <router-link :to="'/chassis/' + chassi + '/items'"
+                >{{ chassi }} / items</router-link
+              >
+            </li>
           </ul>
         </nav>
-      </div>
-      <!-- All content here -->
-      <div class="block">
-        <div class="row">
-          <div class="col-12" v-if="items.length">
-            <div v-for="item in items" :key="item.name_item" class="card shadow-sm shadow mt-3">
-              <div class="card-body d-flex align-items-center">
-                <h6 class="me-3 text-left">{{ item.name_item }}</h6>
-                <span v-if="item.status === 'INCORPORATED'" class="badge badge-success ml-auto">
-                  <i class="pi pi-check"></i> 
-                  {{ item.status }}
-                </span>
-                <span v-if="item.status === 'APPLICABLE'" class="badge badge-warning ml-auto">
-                  <i class="pi pi-lock"></i>
-                  {{ item.status }}
-                </span>
-                <span v-if="item.status === 'NOT APPLICABLE'" class="badge badge-danger ml-auto">
-                  <i class="pi pi-times"></i>
-                  {{ item.status }}
-                </span>
+        <!-- All content here -->
+        <div class="content">
+          <div class="block">
+            <div class="columns" v-if="items.length">
+              <div
+                class="column is-half"
+                v-for="item in items"
+                :key="item.name_item"
+              >
+                <div class="card">
+                  <nav class="level">
+                    <div class="level-left">
+                      <div class="level-item">
+                        <p class="subtitle is-6">{{ item.name_item }}</p>
+                      </div>
+                    </div>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <span
+                          v-if="item.status === 'INCORPORATED'"
+                          class="tag is-success"
+                        >
+                          <i class="pi pi-check"></i>
+                          {{ item.status }}
+                        </span>
+                        <span
+                          v-if="item.status === 'APPLICABLE'"
+                          class="tag is-warning"
+                        >
+                          <i class="pi pi-lock"></i>
+                          {{ item.status }}
+                        </span>
+                        <span
+                          v-if="item.status === 'NOT APPLICABLE'"
+                          class="tag is-danger"
+                        >
+                          <i class="pi pi-times"></i>
+                          {{ item.status }}
+                        </span>
+                      </div>
+                    </div>
+                  </nav>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="block" v-if="isLoading">
-        <loading />
+        <div class="block" v-if="isLoading">
+          <loading />
+        </div>
       </div>
     </section>
   </div>
@@ -93,7 +120,28 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.badge {
-  display: inline-block;
-  margin-left: 10px
-}</style>
+.title {
+  text-align: start;
+}
+.columns:not(.is-desktop) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.column {
+  flex-basis: auto;
+  padding: 0.3rem;
+}
+.level {
+  text-align: start;
+}
+.card{
+  padding: 0.5em;
+  background-color: #eff1fa;
+  border: 1px #eee solid;
+  box-shadow: none;
+}
+.tag {
+  margin-bottom: 0;
+}
+</style>
