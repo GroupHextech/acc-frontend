@@ -39,23 +39,10 @@
                   @click="addValue(key)"
                   href="#"
                   class="button is-link is-fullwidth"
-                  v-if="key === '*'"
-                  >AND</a
-                >
-                <a
-                  @click="addValue(key)"
-                  href="#"
-                  class="button is-link is-fullwidth"
-                  v-else-if="key === '+'"
-                  >OR</a
-                >
-                <a
-                  @click="addValue(key)"
-                  href="#"
-                  class="button is-link is-fullwidth"
-                  v-else
-                  >{{key}}</a
-                >
+                  ><span v-if="key === '*'">AND</span>
+                  <span v-else-if="key === '+'">OR</span>
+                  <span v-else>{{ key }}</span>
+                </a>
               </div>
             </div>
           </div>
