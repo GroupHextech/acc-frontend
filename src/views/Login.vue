@@ -4,12 +4,9 @@
       <div class="hero-body">
         <h1 class="title">Login</h1>
         <section>
-          <div class="columns is-gapless is-multiline is-desktop">
-            <div class="column">
-            </div>
-            <div class="column is-half">
+          <div class="columns is-centered">
+            <div class="column is-half is-offset-one-quarter">
               <div class="box">
-
                 <div class="field">
                   <p class="control has-icons-left has-icons-right">
                     <input class="input" type="email" placeholder="Username" v-model="username">
@@ -38,8 +35,7 @@
                 </div>
               </div>
             </div>
-            <div class="column">
-            </div>
+            <div class="column"></div>
           </div>
         </section>
       </div>
@@ -50,46 +46,19 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-
-interface User {
-  username: string;
-  password: string;
-}
+import { useAuthStore } from "../store/auth";
 
 export default defineComponent({
   name: "Login",
   setup() {
     const username = ref("");
     const password = ref("");
-
     const router = useRouter();
+    const authStore = useAuthStore();
 
-    const users: User[] = [
-      {
-        username: "usuario1",
-        password: "senha1",
-      },
-      {
-        username: "usuario2",
-        password: "senha2",
-      },
-    ];
-
-    function login() {
-      const validUser = users.find(
-        (user) =>
-          user.username === username.value && user.password === password.value
-      );
-
-      if (validUser) {
-        // Redireciona o usuário para a página Chassis
-        router.push({ name: "chassis" });
-
-        // Redireciona o usuário para um chassi específico
-        // router.push({ name: 'chassi-sb', params: { chassi: '10000076' }})
-      } else {
-        alert("Username or password is invalid");
-      }
+    async function login() {
+      authStore.login(username.value, password.value);
+      await router.push({ name: 'chassis'});
     }
 
     return {

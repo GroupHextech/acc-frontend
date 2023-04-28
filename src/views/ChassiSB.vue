@@ -15,7 +15,7 @@
         </nav>
         <div class="content">
           <table class="table is-hoverable">
-            <thead id="header">
+            <thead>
               <tr>
                 <th title="Service Bulletins" id="service-bulletins">Service Bulletins</th>
                 <th title="Part" id="part">Part</th>
@@ -145,7 +145,6 @@ export default defineComponent({
 .pi-circle {
   color: #bbb;
 }
-
 .pi-circle:hover {
   color: #444;
 }
