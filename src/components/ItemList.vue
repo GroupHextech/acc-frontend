@@ -11,11 +11,26 @@
           />
         </p>
         <p class="control">
-          <a class="button is-link"> + Add item </a>
+          <div>
+            <!-- Botão para abrir o modal -->
+            <button class="button is-link" @click="openModal">+ Add item</button>
+      
+            <!-- Modal -->
+            <div class="modal" :class="{ 'is-active': isModalActive }">
+              <div class="modal-background" @click="closeModal"></div>
+              <div class="modal-content">
+                <AddItem />
+              </div>
+              <button
+                class="modal-close is-large"
+                aria-label="close"
+                @click="closeModal"
+              ></button>
+            </div>
+          </div>
         </p>
       </div>
     </div>
-    
 
     <div class="buttons">
       <div class="control" v-for="item in filteredItems" :key="item.id_item">
@@ -43,6 +58,7 @@ import { useItemsStore } from "../store/items";
 
 import axios from "axios";
 
+import AddItem from "./AddItem.vue";
 import Loading from "./Loading.vue";
 
 export default defineComponent({
@@ -55,11 +71,13 @@ export default defineComponent({
   },
   components: {
     Loading,
+    AddItem,
   },
   data() {
     return {
       searchText: "",
       isLoading: true,
+      isModalActive: false,
     };
   },
   computed: {
@@ -86,9 +104,40 @@ export default defineComponent({
         this.isLoading = false;
       }
     },
+    openModal() {
+      this.isModalActive = true;
+    },
+    closeModal() {
+      this.isModalActive = false;
+    },
+    closeAllModals() {
+      const modals = document.querySelectorAll(".modal");
+      modals.forEach(() => {
+        this.closeModal();
+      });
+    },
   },
   mounted() {
     this.loadData();
+    // Add a click event on various child elements to close the parent modal
+    const closeButtons = document.querySelectorAll(
+      ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
+    );
+    closeButtons.forEach((close) => {
+      close.addEventListener("click", () => {
+        this.closeModal();
+      });
+    });
+
+    // Add a keyboard event to close all modals
+    document.addEventListener("keydown", (event) => {
+      const e = event || window.event;
+
+      if (e.keyCode === 27) {
+        // Escape key
+        this.closeAllModals();
+      }
+    });
   },
 });
 </script>
