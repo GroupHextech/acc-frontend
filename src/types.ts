@@ -19,3 +19,8 @@ export interface ItemChassi {
   name_item: string;
   status: string;
 }
+export interface User {
+  username: string;
+  password: string;
+  userType: string;
+}

@@ -54,6 +54,7 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "../store/auth";
 
 export default defineComponent({
   name: "Navbar",
@@ -70,6 +71,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const authStore = useAuthStore();
 
     const isLoggedIn = computed(() => {
       // Verifica se o usuário está na rota de login
@@ -82,7 +84,7 @@ export default defineComponent({
 
     function logout() {
       // Processo de logout
-
+      authStore.logout();
       // Redireciona para a página de login
       router.push({ name: "login" });
     }

@@ -103,7 +103,6 @@ export default {
         this.serviceBulletins = response.data;
       } catch (error) {
         console.error(error);
-      } finally {
       }
     },
     addValue: function (element: any) {
@@ -113,7 +112,7 @@ export default {
       this.operation += element;
     },
     calculate: function () {
-      var result = eval(this.operation);
+      let result = eval(this.operation);
       this.operation = result;
     },
     clear: function () {

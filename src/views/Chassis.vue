@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="authStore.isAuthenticated">
     <section class="hero is-small">
       <div class="hero-body">
         <h1 class="title">Chassis</h1>
@@ -39,14 +39,20 @@
       </div>
     </section>
   </div>
+  <div v-else>Faça Login</div>
 </template>
 
 <script lang="ts">
+import { useAuthStore } from '../store/auth';
 import { Chassi } from "../types";
 import axios from "axios";
 import Loading from "../components/Loading.vue";
 
 export default {
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
+  },
   components: {
     Loading,
   },
