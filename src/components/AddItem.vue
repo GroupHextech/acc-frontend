@@ -3,13 +3,26 @@
     <p class="title is-4">Add item</p>
     <!-- All content here -->
     <div class="container">
-      <div class="control block">
-        <input class="input" type="text" placeholder="Item name" />
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input is-link" type="text" placeholder="Item name" />
+        </p>
+        <p class="control">
+          <i
+            class="button is-link is-outlined pi pi-angle-down"
+            v-on:click="showCalculator = true"
+          ></i>
+        </p>
       </div>
-      <div class="container" id="calculadora">
+      <div class="container block" id="calculadora" v-if="showCalculator">
         <div class="columns is-multiline is-mobile">
           <div class="column is-9">
-            <input type="text" class="input is-fullwidth" v-model="operation" />
+            <input
+              type="text"
+              class="input is-fullwidth"
+              disabled
+              v-model="operation"
+            />
           </div>
           <div class="column is-3">
             <button class="button is-danger is-fullwidth" @click="clear()">
@@ -49,12 +62,20 @@
           <div class="column is-full">
             <button
               class="button is-success is-medium is-fullwidth"
-              @click="calcular()"
+              @click="calculate()"
             >
               Finish
             </button>
           </div>
         </div>
+      </div>
+      <div class="field is-grouped is-grouped-right">
+        <p class="control">
+          <a class="button is-link"> Submit </a>
+        </p>
+        <p class="control">
+          <a class="button is-light"> Cancel </a>
+        </p>
       </div>
     </div>
   </div>
@@ -71,6 +92,7 @@ export default {
       operation: "",
       result: null,
       serviceBulletins: [] as ServiceBulletins[],
+      showCalculator: false,
     };
   },
   computed: {},
@@ -90,7 +112,7 @@ export default {
       }
       this.operation += element;
     },
-    calcular: function () {
+    calculate: function () {
       var result = eval(this.operation);
       this.operation = result;
     },
@@ -108,8 +130,9 @@ export default {
   border-radius: 5px;
 }
 #calculadora {
-  background-color: #ddd;
+  /* background-color: #eff1fa; */
+  border: 1px #dbdbdb solid;
   border-radius: 10px;
-  padding: 25px;
+  padding: 1rem;
 }
 </style>
