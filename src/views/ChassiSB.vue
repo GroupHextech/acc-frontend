@@ -15,13 +15,13 @@
         </nav>
         <div class="content">
           <table class="table is-hoverable">
-            <thead>
+            <thead id="header">
               <tr>
                 <th title="Service Bulletins" id="service-bulletins">Service Bulletins</th>
                 <th title="Part" id="part">Part</th>
                 <th title="Incorporated" id="incorporated">Incorporated</th>
-                <th title="Not Applicable" id="not-applicable">Not Applicable</th>
                 <th title="Applicable" id="applicable">Applicable</th>
+                <th title="Not Applicable" id="not-applicable">Not Applicable</th>
               </tr>
             </thead>
             <tbody>

@@ -21,13 +21,13 @@
               <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
               <div class="buttons is-centered">
                 <router-link
-                  class="button is-link is-light is-small"
+                  class="button is-link is-light is-rounded is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/sb'"
                 >
                   Service Bulletins
                 </router-link>
                 <router-link
-                  class="button is-link is-light is-small"
+                  class="button is-link is-light is-rounded is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/items'"
                 >
                   Items
@@ -84,9 +84,14 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
 }
+.column {
+  flex-basis: auto;
+  padding: 0.3rem;
+}
 .card{
   padding: 0.5em;
-  background-color: #f9f9f9;
-  border: 1px #eee solid
+  background-color: #eff1fa;
+  border: 1px #eee solid;
+  box-shadow: none;
 }
 </style>

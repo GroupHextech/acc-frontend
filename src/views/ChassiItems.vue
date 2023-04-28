@@ -130,14 +130,16 @@ export default defineComponent({
 }
 .column {
   flex-basis: auto;
+  padding: 0.3rem;
 }
 .level {
   text-align: start;
 }
-.card {
+.card{
   padding: 0.5em;
-  background-color: #f9f9f9;
+  background-color: #eff1fa;
   border: 1px #eee solid;
+  box-shadow: none;
 }
 .tag {
   margin-bottom: 0;

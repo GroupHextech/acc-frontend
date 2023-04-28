@@ -94,15 +94,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.columns:not(.is-desktop) {
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.box {
-  padding: 0.5em;
-  background-color: #f9f9f9;
-  border: 1px #eee solid;
-}
 .buttons {
   display: flex;
   flex-wrap: wrap;
