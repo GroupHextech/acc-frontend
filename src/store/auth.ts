@@ -13,7 +13,7 @@ export const useAuthStore = defineStore({
   state: (): AuthState => ({
     user: null as User | null,
     isAuthenticated: false,
-    token: null
+    token: Cookies.get("token") || null,
   }),
   actions: {
     async login(username: string, password: string) {
@@ -55,9 +55,10 @@ export const useAuthStore = defineStore({
       this.user = null;
       this.isAuthenticated = false;
       this.token = null;
+      Cookies.remove("token");
     },
     getToken() {
-      return Cookies.get('token') || null;
+      return this.token;
     }
   },
 });

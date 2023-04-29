@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Chassis from "../views/Chassis.vue";
-import ChassiSB from '../views/ChassiSB.vue';
-import ChassiItems from '../views/ChassiItems.vue';
+import ChassiSB from "../views/ChassiSB.vue";
+import ChassiItems from "../views/ChassiItems.vue";
 import Login from "../views/Login.vue";
 import Items from "../views/Items.vue";
 import ItemDetail from "../views/ItemDetail.vue";
@@ -70,9 +70,12 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
     // NOT AUTHENTICATED --> Redirect to login page
-    next('/');
+    next("/");
+  } else if(to.name === 'login' && !authStore.isAuthenticated) {
+    // AUTHENTICATED --> Trying to access the login page
+    next("/chassis");
   } else {
-    // AUTHENTICATED --> Access to route
+    // AUTHENTICATED --> Access to any another route
     next();
   }
 });
