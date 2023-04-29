@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="authStore.isAuthenticated">
+  <div class="container">
     <section class="hero is-small">
       <div class="hero-body">
         <h1 class="title">Chassis</h1>
@@ -39,7 +39,6 @@
       </div>
     </section>
   </div>
-  <div v-else>Faça Login</div>
 </template>
 
 <script lang="ts">

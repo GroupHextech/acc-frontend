@@ -66,12 +66,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
+  const token = authStore.getToken();
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    // Se a rota requer autenticação e o usuário não está autenticado, redirecione para a página de login
+  if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
+    // NOT AUTHENTICATED --> Redirect to login page
     next('/');
   } else {
-    // Caso contrário, permita o acesso à rota
+    // AUTHENTICATED --> Access to route
     next();
   }
 });

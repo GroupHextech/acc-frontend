@@ -1,14 +1,22 @@
 import { defineStore } from "pinia";
 import { User } from "../types";
+import Cookies from "js-cookie";
+
+interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  token: string | null; // Adicione essa propriedade ao estado do store
+}
 
 export const useAuthStore = defineStore({
   id: "auth",
-  state: () => ({
+  state: (): AuthState => ({
     user: null as User | null,
     isAuthenticated: false,
+    token: null
   }),
   actions: {
-    login(username: string, password: string) {
+    async login(username: string, password: string) {
       // Aqui você deve implementar a lógica de autenticação, como buscar o usuário no banco de dados e verificar a senha
       // Se a autenticação for bem-sucedida, atualize o estado do store
       const adminUser = {
@@ -33,7 +41,9 @@ export const useAuthStore = defineStore({
       if (authenticatedUser) {
         this.user = authenticatedUser;
         this.isAuthenticated = true;
-        
+        this.token = 'meu-token-123';
+        const token = this.token;
+        Cookies.set('token', token, { expires: 7 });
       } else {
         // Se a autenticação falhar, lance um erro ou retorne false para indicar que o login não foi bem-sucedido
         alert("Username or password is invalid!")
@@ -44,6 +54,10 @@ export const useAuthStore = defineStore({
       // Atualize o estado do store para refletir que o usuário não está mais autenticado
       this.user = null;
       this.isAuthenticated = false;
+      this.token = null;
     },
+    getToken() {
+      return Cookies.get('token') || null;
+    }
   },
 });
