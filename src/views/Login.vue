@@ -48,7 +48,7 @@
                   </p>
                 </div>
               </div>
-              <LoginFailed v-if="loginFailed" />
+              <LoginFailed v-if="loginFailed" @close="loginFailed = false" />
             </div>
             <div class="column"></div>
           </div>
