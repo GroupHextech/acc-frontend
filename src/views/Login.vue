@@ -9,7 +9,12 @@
               <div class="box">
                 <div class="field">
                   <p class="control has-icons-left has-icons-right">
-                    <input class="input" type="email" placeholder="Username" v-model="username">
+                    <input
+                      class="input"
+                      type="email"
+                      placeholder="Username"
+                      v-model="username"
+                    />
                     <span class="icon is-small is-left">
                       <i class="pi pi-user"></i>
                     </span>
@@ -20,7 +25,12 @@
                 </div>
                 <div class="field">
                   <p class="control has-icons-left">
-                    <input class="input" type="password" placeholder="Password" v-model="password">
+                    <input
+                      class="input"
+                      type="password"
+                      placeholder="Password"
+                      v-model="password"
+                    />
                     <span class="icon is-small is-left">
                       <i class="pi pi-lock"></i>
                     </span>
@@ -28,12 +38,17 @@
                 </div>
                 <div class="field">
                   <p class="control">
-                    <button type="submit" class="button is-link" @click.prevent="login">
+                    <button
+                      type="submit"
+                      class="button is-link"
+                      @click.prevent="login"
+                    >
                       Sign in
                     </button>
                   </p>
                 </div>
               </div>
+              <LoginFailed v-if="loginFailed" />
             </div>
             <div class="column"></div>
           </div>
@@ -47,6 +62,7 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
+import LoginFailed from "../components/LoginFailed.vue";
 
 export default defineComponent({
   name: "Login",
@@ -55,23 +71,31 @@ export default defineComponent({
     const password = ref("");
     const router = useRouter();
     const authStore = useAuthStore();
+    const loginFailed = ref(false);
 
     async function login() {
-      authStore.login(username.value, password.value);
-      await router.push({ name: 'chassis'});
-    }
 
+      if (await authStore.login(username.value, password.value, loginFailed.value)) {
+        // autenticação bem-sucedida, faça algo aqui
+        await router.push({ name: "chassis" });
+      } else {
+        // autenticação falhou, exiba LoginFailed
+        loginFailed.value = true;
+      }
+    }
     return {
       username,
       password,
+      loginFailed,
       login,
     };
   },
+  components: { LoginFailed },
 });
 </script>
 
 <style scoped>
-.box{
+.box {
   padding: 0.5em;
   background-color: #f9f9f9;
   border: 1px #eee solid;

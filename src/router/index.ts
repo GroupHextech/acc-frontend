@@ -68,12 +68,15 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const token = authStore.getToken();
 
+  console.log("Token: ", token)
+  console.log("Auth: ", authStore.isAuthenticated)
+
   if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
     // NOT AUTHENTICATED --> Redirect to login page
-    next("/");
-  } else if(to.name === 'login' && !authStore.isAuthenticated) {
+    next('/');
+  } else if (to.name === 'login' && token) {
     // AUTHENTICATED --> Trying to access the login page
-    next("/chassis");
+    next('/chassis');
   } else {
     // AUTHENTICATED --> Access to any another route
     next();

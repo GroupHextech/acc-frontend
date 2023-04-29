@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  token: string | null; // Adicione essa propriedade ao estado do store
+  token: string | null;
 }
 
 export const useAuthStore = defineStore({
@@ -14,9 +14,9 @@ export const useAuthStore = defineStore({
     user: null as User | null,
     isAuthenticated: false,
     token: Cookies.get("token") || null,
-  }),
+  }), 
   actions: {
-    async login(username: string, password: string) {
+    async login(username: string, password: string, loginFailed: boolean) {
       // Aqui você deve implementar a lógica de autenticação, como buscar o usuário no banco de dados e verificar a senha
       // Se a autenticação for bem-sucedida, atualize o estado do store
       const adminUser = {
@@ -43,10 +43,12 @@ export const useAuthStore = defineStore({
         this.isAuthenticated = true;
         this.token = 'meu-token-123';
         const token = this.token;
-        Cookies.set('token', token, { expires: 7 });
+        Cookies.set("token", token, { expires: 7 });
+        return true;
       } else {
         // Se a autenticação falhar, lance um erro ou retorne false para indicar que o login não foi bem-sucedido
-        alert("Username or password is invalid!")
+        this.isAuthenticated = false;
+        return false;
       }
     },
     logout() {
