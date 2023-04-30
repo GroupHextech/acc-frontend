@@ -34,8 +34,8 @@
                     </span>
                   </p>
                   <div class="control">
-                    <a id="eyeButton" class="button">
-                      <i id="eye" class="pi pi-eye" @click="showPassword"></i>
+                    <a class="button" id="eyeButton" @click="showPassword">
+                      <i id="eye" class="pi pi-eye"></i>
                     </a>
                   </div>
                 </div>

@@ -17,16 +17,22 @@
           <table class="table is-hoverable">
             <thead>
               <tr>
-                <th title="Service Bulletins" id="service-bulletins">Service Bulletins</th>
+                <th title="Service Bulletins" id="service-bulletins">
+                  Service Bulletins
+                </th>
                 <th title="Part" id="part">Part</th>
                 <th title="Incorporated" id="incorporated">Incorporated</th>
                 <th title="Applicable" id="applicable">Applicable</th>
-                <th title="Not Applicable" id="not-applicable">Not Applicable</th>
+                <th title="Not Applicable" id="not-applicable">
+                  Not Applicable
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="sb in serviceBulletins" :key="sb.service_bulleti_name">
-                <th :title="sb.service_bulleti_name" id="serviceBulletin">{{ sb.service_bulleti_name }}</th>
+                <th :title="sb.service_bulleti_name" id="serviceBulletin">
+                  {{ sb.service_bulleti_name }}
+                </th>
                 <td id="part">{{ sb.part }}</td>
                 <!-- Incorporated -->
                 <td
@@ -86,17 +92,18 @@ export default defineComponent({
   setup(props) {
     const confirmChangeCheck = (sb: any) => {
       Swal.fire({
-        title: "Are you sure?",
-        text: "Do you really want to change the status to 'Incorporated'?",
-        icon: "warning",
+        text: "Do you want to save the changes?",
+        showDenyButton: false,
         showCancelButton: true,
-        confirmButtonColor: "#0A1A5C",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, change state!",
-        cancelButtonText: "Cancel",
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
       }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
           changeCheck(sb);
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
         }
       });
     };
