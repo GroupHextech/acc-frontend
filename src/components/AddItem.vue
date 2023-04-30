@@ -18,12 +18,14 @@
         <p class="subtitle">Add formula</p>
         <div class="columns is-multiline is-mobile">
           <div class="column is-9">
-            <input
-              type="text"
-              class="input is-fullwidth"
+            <textarea
+              class="textarea"
               disabled
               v-model="operation"
-            />
+              rows="2"
+              cols="50"
+              autoresize
+            ></textarea>
           </div>
           <div class="column is-3">
             <button class="button is-danger is-fullwidth" @click="clear()">
@@ -34,12 +36,16 @@
             <div class="field has-addons">
               <div class="control is-expanded">
                 <div class="select is-fullwidth">
-                  <select name="service-bulletin">
+                  <select
+                    name="service-bulletin"
+                    v-model="selectedServiceBulletin"
+                    @change="addValue(selectedServiceBulletin)"
+                  >
                     <option
                       v-for="sb in serviceBulletins"
-                      v-bind:value="sb.service_bulleti_name"
+                      v-bind:value="sb.service_bulleti_name + '-' + sb.part"
                     >
-                      {{ sb.service_bulleti_name }}
+                      {{ sb.service_bulleti_name }}-{{ sb.part }}
                     </option>
                   </select>
                 </div>
@@ -53,8 +59,8 @@
                   @click="addValue(key)"
                   href="#"
                   class="button is-primary is-fullwidth"
-                  ><span v-if="key === '*'">AND</span>
-                  <span v-else-if="key === '+'">OR</span>
+                  ><span v-if="key === ' * '">AND</span>
+                  <span v-else-if="key === ' + '">OR</span>
                   <span v-else>{{ key }}</span>
                 </a>
               </div>
@@ -84,23 +90,50 @@ export default {
   name: "AddItem",
   data() {
     return {
-      operator: ["*", "+", "(", ")"],
+      operator: [" * ", " + ", "(", ")"],
       operation: "",
       result: null,
-      serviceBulletins: [] as ServiceBulletins[],
+      //serviceBulletins: [] as ServiceBulletins[],
+      serviceBulletins: [
+        {
+          service_bulleti_name: "SB-111-111-111",
+          part: "UNIQUE",
+        },
+        {
+          service_bulleti_name: "SB-111-111-112",
+          part: "UNIQUE",
+        },
+        {
+          service_bulleti_name: "SB-111-111-113",
+          part: "UNIQUE",
+        },
+        {
+          service_bulleti_name: "SB-111-111-114",
+          part: "PART 1",
+        },
+        {
+          service_bulleti_name: "SB-111-111-114",
+          part: "PART 2",
+        },
+        {
+          service_bulleti_name: "SB-111-111-114",
+          part: "PART 3",
+        },
+      ] as ServiceBulletins[],
       showCalculator: false,
+      selectedServiceBulletin: null,
     };
   },
   computed: {},
   methods: {
-    async loadData() {
+    /*async loadData() {
       try {
         const response = await axios.get("/bulletin/list/all");
         this.serviceBulletins = response.data;
       } catch (error) {
         console.error(error);
       }
-    },
+    },*/
     addValue: function (element: any) {
       if (typeof this.operation !== "string") {
         this.clear();
@@ -117,10 +150,10 @@ export default {
     },
 
     replaceOperators: function (formula: any) {
-      // Substitui todos os operadores * por &&
+      // Change all operators * for &&
       formula = formula.replace(/\*/g, "&&");
 
-      // Substitui todos os operadores + por ||
+      // Change all operators + for ||
       formula = formula.replace(/\+/g, "||");
 
       return console.log(formula);
@@ -148,7 +181,7 @@ export default {
   border-radius: 10px;
   padding: 1rem;
 }
-.input[disabled] {
+.textarea[disabled] {
   border-color: #dbdbdb;
 }
 </style>

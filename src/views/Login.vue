@@ -94,10 +94,10 @@ export default defineComponent({
   },
   methods: {
     showPassword() {
-      var typePassword: HTMLInputElement = document.getElementById(
+      const typePassword: HTMLInputElement = document.getElementById(
         "password"
       ) as HTMLInputElement;
-      var typeIcon: HTMLInputElement = document.getElementById(
+      const typeIcon: HTMLInputElement = document.getElementById(
         "eye"
       ) as HTMLInputElement;
       if (typePassword.type == "password") {

@@ -68,9 +68,6 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const token = authStore.getToken();
 
-  console.log("Token: ", token)
-  console.log("Auth: ", authStore.isAuthenticated)
-
   if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
     // NOT AUTHENTICATED --> Redirect to login page
     next('/');
