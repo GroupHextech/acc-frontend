@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { User } from "../types";
-import Cookies from "js-cookie";
 
 interface AuthState {
   user: User | null;
@@ -13,7 +12,7 @@ export const useAuthStore = defineStore({
   state: (): AuthState => ({
     user: null as User | null,
     isAuthenticated: false,
-    token: Cookies.get("token") || null,
+    token: sessionStorage.getItem("token") || null,
   }), 
   actions: {
     async login(username: string, password: string) {
@@ -43,7 +42,7 @@ export const useAuthStore = defineStore({
         this.isAuthenticated = true;
         this.token = 'meu-token-123';
         const token = this.token;
-        Cookies.set("token", token, { expires: 7 });
+        sessionStorage.setItem("token", token);
         return true;
       } else {
         // Se a autenticação falhar, lance um erro ou retorne false para indicar que o login não foi bem-sucedido
@@ -57,7 +56,7 @@ export const useAuthStore = defineStore({
       this.user = null;
       this.isAuthenticated = false;
       this.token = null;
-      Cookies.remove("token");
+      sessionStorage.removeItem("token");
     },
     getToken() {
       return this.token;
