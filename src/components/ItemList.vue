@@ -19,7 +19,7 @@
             <div class="modal" :class="{ 'is-active': isModalActive }">
               <div class="modal-background" @click="closeModal"></div>
               <div class="modal-content">
-                <AddItem/>
+                <AddItem @close="isModalActive = false"/>
               </div>
               <button
                 class="modal-close is-large"

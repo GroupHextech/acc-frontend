@@ -19,8 +19,12 @@ export interface ItemChassi {
   name_item: string;
   status: string;
 }
+export interface Permission {
+  id: number;
+  name: string;
+}
 export interface User {
   username: string;
   password: string;
-  userType: string;
+  userType: Permission;
 }

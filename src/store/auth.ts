@@ -16,23 +16,23 @@ export const useAuthStore = defineStore({
     token: Cookies.get("token") || null,
   }), 
   actions: {
-    async login(username: string, password: string, loginFailed: boolean) {
+    async login(username: string, password: string) {
       // Aqui você deve implementar a lógica de autenticação, como buscar o usuário no banco de dados e verificar a senha
       // Se a autenticação for bem-sucedida, atualize o estado do store
       const adminUser = {
         username: "admin",
         password: "admin",
-        userType: "admin",
+        userType: { id: 1, name: "admin"},
       };
       const ownerUser = {
         username: "owner",
         password: "owner",
-        userType: "owner",
+        userType: { id: 2, name: "owner"},
       };
       const pilotUser = {
         username: "pilot",
         password: "pilot",
-        userType: "pilot",
+        userType: { id: 3, name: "pilot"},
       };
       const users = [adminUser, ownerUser, pilotUser];
       const authenticatedUser = users.find(

@@ -14,7 +14,8 @@
           ></i>
         </p>
       </div>
-      <div class="container block" id="calculadora" v-if="showCalculator">
+      <div class="container block" id="calculator" v-if="showCalculator">
+        <p class="subtitle">Add formula</p>
         <div class="columns is-multiline is-mobile">
           <div class="column is-9">
             <input
@@ -51,7 +52,7 @@
                 <a
                   @click="addValue(key)"
                   href="#"
-                  class="button is-link is-fullwidth"
+                  class="button is-link is-rounded is-fullwidth"
                   ><span v-if="key === '*'">AND</span>
                   <span v-else-if="key === '+'">OR</span>
                   <span v-else>{{ key }}</span>
@@ -61,7 +62,7 @@
           </div>
           <div class="column is-full">
             <button
-              class="button is-success is-medium is-fullwidth"
+              class="button is-success"
               @click="calculate()"
             >
               Finish
@@ -74,7 +75,7 @@
           <a class="button is-link"> Submit </a>
         </p>
         <p class="control">
-          <a class="button is-light"> Cancel </a>
+          <a class="button is-light" @click="closeModal"> Cancel </a>
         </p>
       </div>
     </div>
@@ -88,7 +89,7 @@ export default {
   name: "AddItem",
   data() {
     return {
-      operator: ["*", "+", "(", ")"],
+      operator: [ "*", "+", "(", ")" ],
       operation: "",
       result: null,
       serviceBulletins: [] as ServiceBulletins[],
@@ -118,6 +119,9 @@ export default {
     clear: function () {
       this.operation = "";
     },
+    closeModal() {
+      this.$emit("close");
+    }
   },
 };
 </script>
@@ -128,7 +132,7 @@ export default {
   padding: 20px;
   border-radius: 5px;
 }
-#calculadora {
+#calculator {
   /* background-color: #eff1fa; */
   border: 1px #dbdbdb solid;
   border-radius: 10px;

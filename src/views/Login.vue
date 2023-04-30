@@ -75,7 +75,7 @@ export default defineComponent({
 
     async function login() {
 
-      if (await authStore.login(username.value, password.value, loginFailed.value)) {
+      if (await authStore.login(username.value, password.value)) {
         // autenticação bem-sucedida, faça algo aqui
         await router.push({ name: "chassis" });
       } else {
