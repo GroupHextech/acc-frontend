@@ -138,7 +138,7 @@ export default defineComponent({
 .card{
   padding: 0.5em;
   background-color: #eff1fa;
-  border: 1px #eee solid;
+  border: 1px #dbdbdb solid;
   box-shadow: none;
 }
 .tag {

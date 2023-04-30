@@ -8,7 +8,7 @@
             <div class="column is-half is-offset-one-quarter">
               <div class="box">
                 <div class="field">
-                  <p class="control has-icons-left has-icons-right">
+                  <p class="control has-icons-left">
                     <input
                       class="input"
                       type="email"
@@ -18,14 +18,12 @@
                     <span class="icon is-small is-left">
                       <i class="pi pi-user"></i>
                     </span>
-                    <span class="icon is-small is-right">
-                      <i class="pi pi-check"></i>
-                    </span>
                   </p>
                 </div>
-                <div class="field">
-                  <p class="control has-icons-left">
+                <div class="field has-addons">
+                  <p class="control has-icons-left is-expanded">
                     <input
+                      id="password"
                       class="input"
                       type="password"
                       placeholder="Password"
@@ -35,6 +33,11 @@
                       <i class="pi pi-lock"></i>
                     </span>
                   </p>
+                  <div class="control">
+                    <a id="eyeButton" class="button">
+                      <i id="eye" class="pi pi-eye" @click="showPassword"></i>
+                    </a>
+                  </div>
                 </div>
                 <div class="field">
                   <p class="control">
@@ -74,7 +77,6 @@ export default defineComponent({
     const loginFailed = ref(false);
 
     async function login() {
-
       if (await authStore.login(username.value, password.value)) {
         // autenticação bem-sucedida, faça algo aqui
         await router.push({ name: "chassis" });
@@ -90,14 +92,35 @@ export default defineComponent({
       login,
     };
   },
+  methods: {
+    showPassword() {
+      var typePassword: HTMLInputElement = document.getElementById(
+        "password"
+      ) as HTMLInputElement;
+      var typeIcon: HTMLInputElement = document.getElementById(
+        "eye"
+      ) as HTMLInputElement;
+      if (typePassword.type == "password") {
+        typePassword.type = "text";
+        typeIcon.className = "pi pi-eye-slash";
+      } else {
+        typePassword.type = "password";
+        typeIcon.className = "pi pi-eye";
+      }
+    },
+  },
   components: { LoginFailed },
 });
 </script>
 
 <style scoped>
 .box {
-  padding: 0.5em;
-  background-color: #f9f9f9;
-  border: 1px #eee solid;
+  padding: 2rem;
+  background-color: #eff1fa;
+  border: 1px #dbdbdb solid;
+  box-shadow: none;
+}
+#eye {
+  color: #dbdbdb;
 }
 </style>

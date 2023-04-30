@@ -52,7 +52,7 @@
                 <a
                   @click="addValue(key)"
                   href="#"
-                  class="button is-link is-rounded is-fullwidth"
+                  class="button is-primary is-fullwidth"
                   ><span v-if="key === '*'">AND</span>
                   <span v-else-if="key === '+'">OR</span>
                   <span v-else>{{ key }}</span>
@@ -61,12 +61,7 @@
             </div>
           </div>
           <div class="column is-full">
-            <button
-              class="button is-success"
-              @click="calculate()"
-            >
-              Finish
-            </button>
+            <button class="button is-link" @click="calculate()">Finish</button>
           </div>
         </div>
       </div>
@@ -89,7 +84,7 @@ export default {
   name: "AddItem",
   data() {
     return {
-      operator: [ "*", "+", "(", ")" ],
+      operator: ["*", "+", "(", ")"],
       operation: "",
       result: null,
       serviceBulletins: [] as ServiceBulletins[],
@@ -113,15 +108,30 @@ export default {
       this.operation += element;
     },
     calculate: function () {
-      let result = eval(this.operation);
-      this.operation = result;
+      const formula = this.operation;
+      this.replaceOperators(formula);
+
+      // --- Old calc result ---
+      //let result = eval(this.operation);
+      //this.operation = result;
     },
+
+    replaceOperators: function (formula: any) {
+      // Substitui todos os operadores * por &&
+      formula = formula.replace(/\*/g, "&&");
+
+      // Substitui todos os operadores + por ||
+      formula = formula.replace(/\+/g, "||");
+
+      return console.log(formula);
+    },
+
     clear: function () {
       this.operation = "";
     },
     closeModal() {
       this.$emit("close");
-    }
+    },
   },
 };
 </script>
@@ -133,9 +143,12 @@ export default {
   border-radius: 5px;
 }
 #calculator {
-  /* background-color: #eff1fa; */
+  /*background-color: #eff1fa;*/
   border: 1px #dbdbdb solid;
   border-radius: 10px;
   padding: 1rem;
+}
+.input[disabled] {
+  border-color: #dbdbdb;
 }
 </style>

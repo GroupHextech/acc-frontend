@@ -42,7 +42,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-outlined is-light is-small" @click="logout"> Sign out </a>
+              <a class="button is-link is-light is-small" @click="logout"> Sign out </a>
             </div>
           </div>
         </div>
