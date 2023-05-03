@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { User } from "../types";
+import axios from "axios";
+import { ref } from "vue";
 
 interface AuthState {
   user: User | null;
@@ -7,13 +9,37 @@ interface AuthState {
   token: string | null;
 }
 
+// export const useAuthStore = defineStore("login", () => {
+//   const user = ref();
+//   const isAuthenticated = ref();
+//   const token = ref();
+//   const error = ref();
+
+//   async function login(username: string, password: string) {
+//     try {
+//       const response = await axios.post("/login", {
+//         username: username,
+//         password: password,
+//       });
+//       const data = response.data;
+//       user.value = username;
+//       token.value = data.token;
+//       isAuthenticated.value = data.autorization;
+//       error.value = null;
+//     } catch (ex) {
+//       error.value = (ex as Error).message;
+//     }
+//   }
+//   return { user, token, isAuthenticated, error, login }
+// });
+
 export const useAuthStore = defineStore({
   id: "auth",
   state: (): AuthState => ({
     user: null as User | null,
     isAuthenticated: false,
     token: sessionStorage.getItem("token") || null,
-  }), 
+  }),
   actions: {
     async login(username: string, password: string) {
       // Aqui você deve implementar a lógica de autenticação, como buscar o usuário no banco de dados e verificar a senha
@@ -21,17 +47,17 @@ export const useAuthStore = defineStore({
       const adminUser = {
         username: "admin",
         password: "admin",
-        userType: { id: 1, name: "admin"},
+        userType: { id: 1, name: "admin" },
       };
       const ownerUser = {
         username: "owner",
         password: "owner",
-        userType: { id: 2, name: "owner"},
+        userType: { id: 2, name: "owner" },
       };
       const pilotUser = {
         username: "pilot",
         password: "pilot",
-        userType: { id: 3, name: "pilot"},
+        userType: { id: 3, name: "pilot" },
       };
       const users = [adminUser, ownerUser, pilotUser];
       const authenticatedUser = users.find(
@@ -40,7 +66,7 @@ export const useAuthStore = defineStore({
       if (authenticatedUser) {
         this.user = authenticatedUser;
         this.isAuthenticated = true;
-        this.token = 'meu-token-123';
+        this.token = "meu-token-123";
         const token = this.token;
         sessionStorage.setItem("token", token);
         return true;
@@ -60,6 +86,6 @@ export const useAuthStore = defineStore({
     },
     getToken() {
       return this.token;
-    }
+    },
   },
 });
