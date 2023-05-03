@@ -84,8 +84,5 @@ export const useAuthStore = defineStore({
       this.token = null;
       sessionStorage.removeItem("token");
     },
-    getToken() {
-      return this.token;
-    },
   },
 });

@@ -66,7 +66,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  const token = authStore.getToken();
+  const token = authStore.token;
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
     // NOT AUTHENTICATED --> Redirect to login page
