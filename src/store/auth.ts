@@ -30,6 +30,17 @@ interface AuthState {
 //       error.value = (ex as Error).message;
 //     }
 //   }
+//   async function logout() {
+//   try {
+//     await axios.post('/logout');
+//     user.value = null;
+//     token.value = null;
+//     isAuthenticated.value = false;
+//     error.value = null;
+//   } catch (ex) {
+//     error.value = (ex as Error).message;
+//   }
+// }
 //   return { user, token, isAuthenticated, error, login }
 // });
 
