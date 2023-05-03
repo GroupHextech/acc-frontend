@@ -6,6 +6,7 @@ import Login from "../views/Login.vue";
 import Items from "../views/Items.vue";
 import ItemDetail from "../views/ItemDetail.vue";
 import RegisterChassi from "../views/RegisterChassi.vue";
+import PageNotFound from "../views/PageNotFound.vue";
 import { useAuthStore } from "../store/auth";
 
 // createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,12 @@ const routes: Array<RouteRecordRaw> = [
     component: RegisterChassi,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: PageNotFound,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
@@ -70,10 +77,10 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
     // NOT AUTHENTICATED --> Redirect to login page
-    next('/');
-  } else if (to.name === 'login' && token) {
+    next("/");
+  } else if (to.name === "login" && token) {
     // AUTHENTICATED --> Trying to access the login page
-    next('/chassis');
+    next("/chassis");
   } else {
     // AUTHENTICATED --> Access to any another route
     next();
