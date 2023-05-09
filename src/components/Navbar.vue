@@ -29,6 +29,7 @@
 
         <div class="navbar-start">
           <a class="navbar-item"> Home </a>
+          <router-link class="navbar-item" to="/dashboard">Dashboard</router-link>
           <div class="navbar-item has-dropdown is-hoverable">
             <router-link class="navbar-link" to="/chassis">Chassis</router-link>
             <div class="navbar-dropdown">

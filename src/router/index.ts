@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import Dashboard from '../views/Dashboard.vue'
 import Chassis from "../views/Chassis.vue";
 import ChassiSB from "../views/ChassiSB.vue";
 import ChassiItems from "../views/ChassiItems.vue";
@@ -16,6 +17,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/dashboard", 
+    name: "Dashboard",
+    component: Dashboard,
+    meta: { requiresAuth: true },
   },
   {
     path: "/items",
