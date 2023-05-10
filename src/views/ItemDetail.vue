@@ -6,12 +6,21 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/items">items</router-link></li>
-            <li><router-link :to="selectedItemName">{{ selectedItemName }}</router-link></li>
+            <li>
+              <router-link :to="selectedItemName">{{
+                selectedItemName
+              }}</router-link>
+            </li>
           </ul>
         </nav>
         <!-- All content here -->
         <div class="content">
-          <i class="pi pi-wrench" style="font-size: 2rem"></i>
+          <div class="card block" v-for="chassi in chassis" :key="chassi.chassi_id">
+            {{ chassi }}
+          </div>
+          <div class="block" v-if="isLoading">
+            <loading />
+          </div>
         </div>
       </div>
     </section>
@@ -21,6 +30,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useItemsStore } from "../store/items";
+import Loading from "../components/Loading.vue";
+import { Chassi } from '../types';
+import axios from "axios";
 
 export default defineComponent({
   name: "ItemDetail",
@@ -34,6 +46,15 @@ export default defineComponent({
       //required: true
     },
   },
+  components: {
+    Loading,
+  },
+  data() {
+    return {
+      chassis: [] as Chassi[],
+      isLoading: true,
+    };
+  },
   setup(props) {
     return {};
   },
@@ -43,11 +64,45 @@ export default defineComponent({
       return itemsStore.selectedItemName;
     },
   },
+  methods: {
+    async loadData() {
+      try {
+        this.isLoading = true;
+        const newItemName = this.selectedItemName
+          .replaceAll(" ","")
+          .replaceAll("ã","a")
+          .replaceAll("é","e")
+          .replaceAll("á","a")
+          .replaceAll("à","a")
+          .replaceAll("â","a")
+          .replaceAll("/","")
+          .toLowerCase();
+        console.log("Item name: ", newItemName);
+        const response = await axios.get("/item/listchassi/" + newItemName);
+        console.log(response.data);
+        const chassis = response.data;
+        this.chassis = chassis;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.loadData();
+  },
 });
 </script>
 
 <style scoped>
 .title {
   text-align: start;
+}
+.card{
+  padding: 0.5em;
+  background-color: #eff1fa;
+  border: 1px #dbdbdb solid;
+  box-shadow: none;
 }
 </style>
