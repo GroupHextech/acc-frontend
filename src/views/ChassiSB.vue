@@ -50,13 +50,13 @@
                   ></a>
                 </td>
                 <td v-else></td>
-                <!-- Not Applicable -->
-                <td v-if="sb.status === 'NOT APPLICABLE'">
+                <!-- Applicable -->
+                <td v-if="sb.status === 'APPLICABLE'">
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
                 <td v-else></td>
-                <!-- Applicable -->
-                <td v-if="sb.status === 'APPLICABLE'">
+                <!-- Not Applicable -->
+                <td v-if="sb.status === 'NOT APPLICABLE'">
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
                 <td v-else></td>
@@ -73,10 +73,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { ServiceBulletins } from "../types";
+import { ServiceBulletin } from "../types";
 import Loading from "../components/Loading.vue";
 
 export default defineComponent({
@@ -90,57 +90,70 @@ export default defineComponent({
     Loading,
   },
   setup(props) {
-    const confirmChangeCheck = (sb: any) => {
-      Swal.fire({
-        text: "Do you want to save the changes?",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't save`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
+    const serviceBulletins = ref<ServiceBulletin[]>([]);
+    const isLoading = ref(true);
+
+    const confirmChangeCheck = async (sb: ServiceBulletin) => {
+      try {
+        const currentStatus = sb.status;
+        const futureStatus = "INCORPORATED";
+
+        const result = await Swal.fire({
+          html: `
+            <p><strong>Current Status:</strong> ${currentStatus}</p>
+            <p><strong>Future Status:</strong> ${futureStatus}</p>
+            <br>
+            <p>Do you want to save the changes?</p>
+          `,
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "Save",
+          denyButtonText: `Don't save`,
+        });
+
         if (result.isConfirmed) {
+          await axios.post("/update/bulletin", {
+            serviceBulletinUpdateDto: [
+              {
+                bulletin_service_name: sb.service_bulleti_name,
+                part: sb.part,
+                status: futureStatus,
+              },
+            ],
+            chassi_id: props.chassi,
+          });
+
           Swal.fire("Saved!", "", "success");
-          changeCheck(sb);
+          // Reload data or update specific item in the list
+          loadData();
         } else if (result.isDenied) {
           Swal.fire("Changes are not saved", "", "info");
         }
-      });
+      } catch (error) {
+        console.error(error);
+        Swal.fire("Error occurred", "", "error");
+      }
     };
 
-    const changeCheck = (sb: any) => {
-      sb.incorporated = true;
-      sb.applicable = false;
-    };
-
-    return {
-      confirmChangeCheck,
-      changeCheck,
-    };
-  },
-
-  data() {
-    return {
-      serviceBulletins: [] as ServiceBulletins[],
-      isLoading: true,
-    };
-  },
-  methods: {
-    async loadData() {
+    const loadData = async () => {
       try {
-        this.isLoading = true;
-        const response = await axios.get("/bulletins/listar/" + this.chassi);
-        this.serviceBulletins = response.data;
+        isLoading.value = true;
+        const response = await axios.get("/bulletins/listar/" + props.chassi);
+        serviceBulletins.value = response.data;
       } catch (error) {
         console.error(error);
       } finally {
-        this.isLoading = false;
+        isLoading.value = false;
       }
-    },
-  },
+    };
 
-  mounted() {
-    this.loadData();
+    onMounted(loadData);
+
+    return {
+      serviceBulletins,
+      isLoading,
+      confirmChangeCheck,
+    };
   },
 });
 </script>

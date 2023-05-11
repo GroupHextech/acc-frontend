@@ -10,7 +10,7 @@ export interface Item {
 export interface Chassi {
   chassi_id: number;
 }
-export interface ServiceBulletins {
+export interface ServiceBulletin {
   service_bulleti_name: string;
   status: string;
   part: string;
