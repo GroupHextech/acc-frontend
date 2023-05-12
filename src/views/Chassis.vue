@@ -19,7 +19,7 @@
           >
             <div class="card">
               <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
-              <div class="buttons is-centered">
+              <div class="buttons is-centered" v-if="hasPermission('allowed')">
                 <router-link
                   class="button is-link is-light is-rounded is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/sb'"
@@ -50,7 +50,15 @@ import Loading from "../components/Loading.vue";
 export default {
   setup() {
     const authStore = useAuthStore();
-    return { authStore };
+
+    function hasPermission(permission: string): boolean {
+      return authStore.hasPermission(permission);
+    }
+
+    return {
+      authStore,
+      hasPermission,
+    };
   },
   components: {
     Loading,

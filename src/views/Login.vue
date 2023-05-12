@@ -69,11 +69,12 @@ import LoginFailed from "../components/LoginFailed.vue";
 
 export default defineComponent({
   name: "Login",
+  components: { LoginFailed },
   setup() {
     const username = ref("");
     const password = ref("");
-    const router = useRouter();
     const authStore = useAuthStore();
+    const router = useRouter();
     const loginFailed = ref(false);
 
     async function login() {
@@ -85,11 +86,29 @@ export default defineComponent({
         loginFailed.value = true;
       }
     }
+
+    function showPassword() {
+      const typePassword: HTMLInputElement = document.getElementById(
+        "password"
+      ) as HTMLInputElement;
+      const typeIcon: HTMLInputElement = document.getElementById(
+        "eye"
+      ) as HTMLInputElement;
+      if (typePassword.type == "password") {
+        typePassword.type = "text";
+        typeIcon.className = "pi pi-eye-slash";
+      } else {
+        typePassword.type = "password";
+        typeIcon.className = "pi pi-eye";
+      }
+    }
     return {
+      ...authStore,
       username,
       password,
-      loginFailed,
       login,
+      loginFailed,
+      showPassword,
     };
   },
   methods: {
@@ -109,7 +128,6 @@ export default defineComponent({
       }
     },
   },
-  components: { LoginFailed },
 });
 </script>
 
