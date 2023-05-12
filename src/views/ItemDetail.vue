@@ -2,12 +2,14 @@
   <div class="container">
     <section class="hero is-small">
       <div class="hero-body">
-        <h1 class="title">{{ selectedItemName }}</h1>
+        <h1 class="title">{{ name_item }}</h1>
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/items">items</router-link></li>
             <li>
-              <router-link :to="{ name: 'ItemDetail', params: { id: identifier } }">{{ selectedItemName }}</router-link>
+              <router-link :to="{ name: 'ItemDetail', params: { id_item: id_item, name_item: name_item } }">
+                {{ id_item }} / {{ name_item }}
+              </router-link>
             </li>
           </ul>
         </nav>
@@ -35,8 +37,12 @@ import axios from "axios";
 export default defineComponent({
   name: "ItemDetail",
   props: {
-    identifier: {
-      type: [Number, String],
+    id_item: {
+      type: Number,
+      required: true
+    },
+    name_item: {
+      type: String,
       required: true
     },
   },
@@ -63,12 +69,12 @@ export default defineComponent({
       try {
         this.isLoading = true;
         let response;
-        if (typeof this.identifier === 'number') {
+        if (typeof this.id_item === 'number') {
           // Search by ID
-          response = await axios.get("/item/listchassi/" + this.identifier);
+          response = await axios.get("/item/listchassi/" + this.id_item);
         } else {
           // Search by name
-          const newItemName = this.identifier
+          const newItemName = this.name_item
             .replaceAll(" ", "")
             .replaceAll("ã", "a")
             .replaceAll("é", "e")
@@ -99,7 +105,6 @@ export default defineComponent({
 .title {
   text-align: start;
 }
-
 .card {
   padding: 0.5em;
   background-color: #eff1fa;

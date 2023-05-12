@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/items/:identifier',
+    path: '/item/:id_item/:name_item',
     name: 'ItemDetail',
     component: ItemDetail,
     props: true,
