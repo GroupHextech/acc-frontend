@@ -7,9 +7,7 @@
           <ul>
             <li><router-link to="/items">items</router-link></li>
             <li>
-              <router-link :to="selectedItemName">{{
-                selectedItemName
-              }}</router-link>
+              <router-link :to="{ name: 'ItemDetail', params: { id: identifier } }">{{ selectedItemName }}</router-link>
             </li>
           </ul>
         </nav>
@@ -71,13 +69,13 @@ export default defineComponent({
         } else {
           // Search by name
           const newItemName = this.identifier
-            .replaceAll(" ","")
-            .replaceAll("ã","a")
-            .replaceAll("é","e")
-            .replaceAll("á","a")
-            .replaceAll("à","a")
-            .replaceAll("â","a")
-            .replaceAll("/","")
+            .replaceAll(" ", "")
+            .replaceAll("ã", "a")
+            .replaceAll("é", "e")
+            .replaceAll("á", "a")
+            .replaceAll("à", "a")
+            .replaceAll("â", "a")
+            .replaceAll("/", "")
             .toLowerCase();
           response = await axios.get("/item/listchassi/" + newItemName);
         }
@@ -101,7 +99,8 @@ export default defineComponent({
 .title {
   text-align: start;
 }
-.card{
+
+.card {
   padding: 0.5em;
   background-color: #eff1fa;
   border: 1px #dbdbdb solid;
