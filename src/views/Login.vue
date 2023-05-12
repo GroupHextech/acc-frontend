@@ -9,12 +9,7 @@
               <div class="box">
                 <div class="field">
                   <p class="control has-icons-left">
-                    <input
-                      class="input"
-                      type="email"
-                      placeholder="Username"
-                      v-model="username"
-                    />
+                    <input class="input" type="email" placeholder="Username" v-model="username" />
                     <span class="icon is-small is-left">
                       <i class="pi pi-user"></i>
                     </span>
@@ -22,13 +17,7 @@
                 </div>
                 <div class="field has-addons">
                   <p class="control has-icons-left is-expanded">
-                    <input
-                      id="password"
-                      class="input"
-                      type="password"
-                      placeholder="Password"
-                      v-model="password"
-                    />
+                    <input id="password" class="input" type="password" placeholder="Password" v-model="password" />
                     <span class="icon is-small is-left">
                       <i class="pi pi-lock"></i>
                     </span>
@@ -41,17 +30,20 @@
                 </div>
                 <div class="field">
                   <p class="control">
-                    <button
-                      type="submit"
-                      class="button is-link"
-                      @click.prevent="login"
-                    >
-                      Sign in
+                    <button type="submit" class="button is-link" :class="{ 'p-button-loading': loading }"
+                      @click.prevent="login">
+                      <span v-if="!loading">Sign in</span>
+                      <span v-else>
+                        <i class="pi pi-spin pi-spinner"></i>
+                      </span>
                     </button>
                   </p>
                 </div>
               </div>
               <LoginFailed v-if="loginFailed" @close="loginFailed = false" />
+              <div v-if="errorMessage" class="notification is-danger">
+                {{ errorMessage }}
+              </div>
             </div>
             <div class="column"></div>
           </div>
@@ -77,13 +69,30 @@ export default defineComponent({
     const router = useRouter();
     const loginFailed = ref(false);
 
+    const loading = ref(false);
+    const errorMessage = ref("");
+
     async function login() {
-      if (await authStore.login(username.value, password.value)) {
-        // autenticação bem-sucedida, faça algo aqui
-        await router.push({ name: "chassis" });
-      } else {
-        // autenticação falhou, exiba LoginFailed
-        loginFailed.value = true;
+      loading.value = true;
+      try {
+        if (await authStore.login(username.value, password.value)) {
+          // Successful authentication
+          await router.push({ name: "chassis" });
+        } else {
+          // Authentication failed, display LoginFailed
+          loginFailed.value = true;
+        }
+      } catch (error: any) {
+        // Error handling
+        const errorMessage = error.message;
+        if (error.response && error.response.status === 401) {
+          errorMessage.value = 'Invalid credentials. Please check your username and password.';
+          password.value = ''; // Clear the password field.
+        } else {
+          errorMessage.value = 'An error occurred during login. Please try again.';
+        }
+      } finally {
+        loading.value = false;
       }
     }
 
@@ -106,8 +115,10 @@ export default defineComponent({
       ...authStore,
       username,
       password,
+      loading,
       login,
       loginFailed,
+      errorMessage,
       showPassword,
     };
   },
@@ -138,6 +149,7 @@ export default defineComponent({
   border: 1px #dbdbdb solid;
   box-shadow: none;
 }
+
 #eye {
   color: #dbdbdb;
 }

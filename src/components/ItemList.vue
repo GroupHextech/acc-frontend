@@ -36,7 +36,7 @@
       <div class="control" v-for="item in filteredItems" :key="item.id_item">
         <router-link
           class="button is-link is-light is-rounded"
-          :to="{ name: 'ItemDetail', params: { id: item.id_item } }"
+          :to="{ name: 'ItemDetail', params: { identifier: item.id_item }, query: { name: item.name_item } }"
           @click="selectItem(item.name_item)"
         >
           <p>{{ item.name_item }}</p>

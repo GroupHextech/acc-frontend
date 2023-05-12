@@ -37,13 +37,9 @@ import axios from "axios";
 export default defineComponent({
   name: "ItemDetail",
   props: {
-    id_item: {
-      type: Number,
-      //required: true
-    },
-    name_item: {
-      type: String,
-      //required: true
+    identifier: {
+      type: [Number, String],
+      required: true
     },
   },
   components: {
@@ -68,17 +64,23 @@ export default defineComponent({
     async loadData() {
       try {
         this.isLoading = true;
-        const newItemName = this.selectedItemName
-          .replaceAll(" ","")
-          .replaceAll("ã","a")
-          .replaceAll("é","e")
-          .replaceAll("á","a")
-          .replaceAll("à","a")
-          .replaceAll("â","a")
-          .replaceAll("/","")
-          .toLowerCase();
-        console.log("Item name: ", newItemName);
-        const response = await axios.get("/item/listchassi/" + newItemName);
+        let response;
+        if (typeof this.identifier === 'number') {
+          // Search by ID
+          response = await axios.get("/item/listchassi/" + this.identifier);
+        } else {
+          // Search by name
+          const newItemName = this.identifier
+            .replaceAll(" ","")
+            .replaceAll("ã","a")
+            .replaceAll("é","e")
+            .replaceAll("á","a")
+            .replaceAll("à","a")
+            .replaceAll("â","a")
+            .replaceAll("/","")
+            .toLowerCase();
+          response = await axios.get("/item/listchassi/" + newItemName);
+        }
         console.log(response.data);
         const chassis = response.data;
         this.chassis = chassis;

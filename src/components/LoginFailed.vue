@@ -1,29 +1,35 @@
 <template>
-  <div class="notification is-danger">
+  <div class="notification is-danger" ref="notificationRef">
     <button class="delete" @click="close"></button>
     Username or password is invalid!
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 
 export default defineComponent({
   name: 'LoginFailed',
-  methods: {
-    close() {
-      this.$emit('close');
-    }
-  },
-  mounted() {
-    (this.$el.querySelectorAll('.notification .delete') || []).forEach(($delete: any) => {
-      const $notification = $delete.parentNode;
+  setup(_, { emit }) {
+    const notificationRef = ref<HTMLElement | null>(null);
 
-      $delete.addEventListener('click', () => {
-        $notification.parentNode.removeChild($notification);
-        this.close();
-      });
+    const close = () => {
+      emit('close');
+    };
+
+    onMounted(() => {
+      const $delete = notificationRef.value?.querySelector('.delete') as HTMLElement | null;
+      if ($delete) {
+        $delete.addEventListener('click', () => {
+          close();
+        });
+      }
     });
+
+    return {
+      notificationRef,
+      close
+    };
   },
 });
 </script>

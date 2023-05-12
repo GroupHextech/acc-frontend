@@ -32,8 +32,8 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/items/item?id=:id",
-    name: "ItemDetail",
+    path: '/items/:identifier',
+    name: 'ItemDetail',
     component: ItemDetail,
     props: true,
     meta: { requiresAuth: true },
