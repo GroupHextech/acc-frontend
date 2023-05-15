@@ -83,11 +83,9 @@ export default defineComponent({
       return true;
     });
 
-    function logout() {
-      // Processo de logout
-      authStore.logout();
-      // Redireciona para a página de login
-      router.push({ name: "login" });
+    async function logout() {
+      await authStore.logout();
+      await router.push({ name: "login" });
     }
 
     return {

@@ -2,14 +2,14 @@
   <div class="container">
     <section class="hero is-small">
       <div class="hero-body">
-        <h1 class="title">{{ selectedItemName }}</h1>
+        <h1 class="title">{{ name_item }}</h1>
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/items">items</router-link></li>
             <li>
-              <router-link :to="selectedItemName">{{
-                selectedItemName
-              }}</router-link>
+              <router-link :to="{ name: 'ItemDetail', params: { id_item: id_item, name_item: name_item } }">
+                {{ id_item }} / {{ name_item }}
+              </router-link>
             </li>
           </ul>
         </nav>
@@ -39,11 +39,11 @@ export default defineComponent({
   props: {
     id_item: {
       type: Number,
-      //required: true
+      required: true
     },
     name_item: {
       type: String,
-      //required: true
+      required: true
     },
   },
   components: {
@@ -68,17 +68,23 @@ export default defineComponent({
     async loadData() {
       try {
         this.isLoading = true;
-        const newItemName = this.selectedItemName
-          .replaceAll(" ","")
-          .replaceAll("ã","a")
-          .replaceAll("é","e")
-          .replaceAll("á","a")
-          .replaceAll("à","a")
-          .replaceAll("â","a")
-          .replaceAll("/","")
-          .toLowerCase();
-        console.log("Item name: ", newItemName);
-        const response = await axios.get("/item/listchassi/" + newItemName);
+        let response;
+        if (typeof this.id_item === 'number') {
+          // Search by ID
+          response = await axios.get("/item/listchassi/" + this.id_item);
+        } else {
+          // Search by name
+          const newItemName = this.name_item
+            .replaceAll(" ", "")
+            .replaceAll("ã", "a")
+            .replaceAll("é", "e")
+            .replaceAll("á", "a")
+            .replaceAll("à", "a")
+            .replaceAll("â", "a")
+            .replaceAll("/", "")
+            .toLowerCase();
+          response = await axios.get("/item/listchassi/" + newItemName);
+        }
         console.log(response.data);
         const chassis = response.data;
         this.chassis = chassis;
@@ -99,7 +105,7 @@ export default defineComponent({
 .title {
   text-align: start;
 }
-.card{
+.card {
   padding: 0.5em;
   background-color: #eff1fa;
   border: 1px #dbdbdb solid;

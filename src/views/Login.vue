@@ -9,12 +9,7 @@
               <div class="box">
                 <div class="field">
                   <p class="control has-icons-left">
-                    <input
-                      class="input"
-                      type="email"
-                      placeholder="Username"
-                      v-model="username"
-                    />
+                    <input class="input" type="email" placeholder="Username" v-model="username" />
                     <span class="icon is-small is-left">
                       <i class="pi pi-user"></i>
                     </span>
@@ -22,13 +17,7 @@
                 </div>
                 <div class="field has-addons">
                   <p class="control has-icons-left is-expanded">
-                    <input
-                      id="password"
-                      class="input"
-                      type="password"
-                      placeholder="Password"
-                      v-model="password"
-                    />
+                    <input id="password" class="input" type="password" placeholder="Password" v-model="password" />
                     <span class="icon is-small is-left">
                       <i class="pi pi-lock"></i>
                     </span>
@@ -41,12 +30,12 @@
                 </div>
                 <div class="field">
                   <p class="control">
-                    <button
-                      type="submit"
-                      class="button is-link"
-                      @click.prevent="login"
-                    >
-                      Sign in
+                    <button type="submit" class="button is-link" :class="{ 'p-button-loading': loading }"
+                      @click="login">
+                      <span v-if="!loading">Sign in</span>
+                      <span v-else>
+                        <i class="pi pi-spin pi-spinner"></i>
+                      </span>
                     </button>
                   </p>
                 </div>
@@ -69,31 +58,43 @@ import LoginFailed from "../components/LoginFailed.vue";
 
 export default defineComponent({
   name: "Login",
+  components: { LoginFailed },
   setup() {
     const username = ref("");
     const password = ref("");
-    const router = useRouter();
     const authStore = useAuthStore();
+    const router = useRouter();
     const loginFailed = ref(false);
 
+    const loading = ref(false);
+    const errorMessage = ref("");
+
     async function login() {
-      if (await authStore.login(username.value, password.value)) {
-        // autenticação bem-sucedida, faça algo aqui
-        await router.push({ name: "chassis" });
-      } else {
-        // autenticação falhou, exiba LoginFailed
-        loginFailed.value = true;
+      loading.value = true;
+      try {
+        if (await authStore.login(username.value, password.value)) {
+          // Successful authentication
+          router.push({ name: "chassis" });
+          console.log("Login deu certo!");
+        } else {
+          // Authentication failed, display LoginFailed
+          loginFailed.value = true;
+          console.log("Login falhou no componente")
+        }
+      } catch (error: any) {
+        // Error handling
+        if (error.response && error.response.status === 401) {
+          console.log("Invalid credentials. Please check your username and password.");
+          password.value = ''; // Clear the password field.
+        } else {
+          console.log("An error occurred during login. Please try again.");
+        }
+      } finally {
+        loading.value = false;
       }
     }
-    return {
-      username,
-      password,
-      loginFailed,
-      login,
-    };
-  },
-  methods: {
-    showPassword() {
+
+    function showPassword() {
       const typePassword: HTMLInputElement = document.getElementById(
         "password"
       ) as HTMLInputElement;
@@ -107,9 +108,18 @@ export default defineComponent({
         typePassword.type = "password";
         typeIcon.className = "pi pi-eye";
       }
-    },
+    }
+    return {
+//      ...authStore,
+      username,
+      password,
+      loading,
+      login,
+      loginFailed,
+      errorMessage,
+      showPassword,
+    };
   },
-  components: { LoginFailed },
 });
 </script>
 
@@ -120,6 +130,7 @@ export default defineComponent({
   border: 1px #dbdbdb solid;
   box-shadow: none;
 }
+
 #eye {
   color: #dbdbdb;
 }
