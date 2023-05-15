@@ -31,7 +31,7 @@
                 <div class="field">
                   <p class="control">
                     <button type="submit" class="button is-link" :class="{ 'p-button-loading': loading }"
-                      @click.prevent="login">
+                      @click="login">
                       <span v-if="!loading">Sign in</span>
                       <span v-else>
                         <i class="pi pi-spin pi-spinner"></i>
@@ -41,9 +41,6 @@
                 </div>
               </div>
               <LoginFailed v-if="loginFailed" @close="loginFailed = false" />
-              <div v-if="errorMessage" class="notification is-danger">
-                {{ errorMessage }}
-              </div>
             </div>
             <div class="column"></div>
           </div>
@@ -77,19 +74,20 @@ export default defineComponent({
       try {
         if (await authStore.login(username.value, password.value)) {
           // Successful authentication
-          await router.push({ name: "chassis" });
+          router.push({ name: "chassis" });
+          console.log("Login deu certo!");
         } else {
           // Authentication failed, display LoginFailed
           loginFailed.value = true;
+          console.log("Login falhou no componente")
         }
       } catch (error: any) {
         // Error handling
-        const errorMessage = error.message;
         if (error.response && error.response.status === 401) {
-          errorMessage.value = 'Invalid credentials. Please check your username and password.';
+          console.log("Invalid credentials. Please check your username and password.");
           password.value = ''; // Clear the password field.
         } else {
-          errorMessage.value = 'An error occurred during login. Please try again.';
+          console.log("An error occurred during login. Please try again.");
         }
       } finally {
         loading.value = false;
@@ -112,7 +110,7 @@ export default defineComponent({
       }
     }
     return {
-      ...authStore,
+//      ...authStore,
       username,
       password,
       loading,
@@ -121,23 +119,6 @@ export default defineComponent({
       errorMessage,
       showPassword,
     };
-  },
-  methods: {
-    showPassword() {
-      const typePassword: HTMLInputElement = document.getElementById(
-        "password"
-      ) as HTMLInputElement;
-      const typeIcon: HTMLInputElement = document.getElementById(
-        "eye"
-      ) as HTMLInputElement;
-      if (typePassword.type == "password") {
-        typePassword.type = "text";
-        typeIcon.className = "pi pi-eye-slash";
-      } else {
-        typePassword.type = "password";
-        typeIcon.className = "pi pi-eye";
-      }
-    },
   },
 });
 </script>

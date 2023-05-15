@@ -1,28 +1,13 @@
 import { defineStore } from "pinia";
-import { User } from "../types";
 import axios from "axios";
-// import { ref } from "vue";
+import { ref } from "vue";
 
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  token: string | null;
-  username: string;
-  password: string;
-  loginFailed: boolean;
-  authorization: string | null;
-}
-
-export const useAuthStore = defineStore("login", () => {
-  const state: AuthState = {
-    user: null,
-    isAuthenticated: false,
-    token: null,
-    username: "",
-    password: "",
-    loginFailed: false,
-    authorization: null,
-  };
+export const useAuthStore = defineStore("auth", () => {
+  const isAuthenticated = ref();
+  const token = ref();
+  const user = ref();
+  const loginFailed = ref();
+  const authorization = ref();
 
   async function login(username: string, password: string): Promise<boolean> {
     try {
@@ -31,14 +16,17 @@ export const useAuthStore = defineStore("login", () => {
         password: password,
       });
       const data = response.data;
-      state.user = data.username;
-      state.token = data.token;
-      state.isAuthenticated = data.authorization;
-      state.loginFailed = false;
-      state.authorization = data.authorization;
+      user.value = data.username;
+      token.value = data.token;
+      isAuthenticated.value = true;
+      console.log("isAuthenticated: "+ isAuthenticated.value);
+      loginFailed.value = false;
+      authorization.value = data.autorizacao;
+      console.log(data);
       return true
     } catch (ex) {
-      state.loginFailed = true;
+      console.log("Login failed!");
+      loginFailed.value = true;
       return false
     }
   }
@@ -46,40 +34,33 @@ export const useAuthStore = defineStore("login", () => {
   async function logout(): Promise<void> {
     try {
       await axios.post("/logout");
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
-      state.loginFailed = false;
-      state.authorization = null;
+      user.value = null;
+      token.value = null;
+      isAuthenticated.value = false;
+      loginFailed.value = false;
+      authorization.value = null;
     } catch (ex) {
       // Logout error
     }
   }
 
   function hasPermission(permission: string): boolean {
-    if (!state.authorization) {
+    if (!authorization.value) {
       return false;
     }
-    if (state.authorization === "ADMIN") {
+    if (authorization.value === "ADMIN") {
       return permission !== "restrict"; // Admin - "restrict"
-    } else if (state.authorization === "OWNER") {
+    } else if (authorization.value === "OWNER") {
       return permission === "allowed"; // Owner - "allowed"
     }
     return true; // if there is no restriction
   }
-
-  // async function logout() {
-  // try {
-  //   await axios.post('/logout');
-  //   state.user = null;
-  //   state.token = null;
-  //   state.isAuthenticated = false;
-  //   state.loginFailed = null;
-  // } catch (ex) {
-  //   error.value = (ex as Error).message;
-  // }
   return { 
-    ...state,
+    isAuthenticated,
+    token,
+    user,
+    loginFailed,
+    authorization,
     login,
     logout,
     hasPermission,

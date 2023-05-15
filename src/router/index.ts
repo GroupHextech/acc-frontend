@@ -78,20 +78,25 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  const token = authStore.token;
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated && !token) {
-    // NOT AUTHENTICATED --> Redirect to login page
-    next("/");
-  } else if (to.name === "login" && token) {
-    // AUTHENTICATED --> Trying to access the login page
-    next("/chassis");
-  } else {
-    // AUTHENTICATED --> Access to any another route
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore();
+//   const token = authStore.token;
+//   const isAuthenticated = authStore.isAuthenticated;
 
+//   if (to.meta.requiresAuth && !isAuthenticated && !token) {
+//     // NOT AUTHENTICATED --> Redirect to login page
+//     next("/");
+//     console.log("isAuthenticated "+ isAuthenticated)
+//   } else if (to.name === "login" && token) {
+//     // AUTHENTICATED --> Trying to access the login page
+//     next("/chassis");
+//     console.log("Indo pra tela de chassis")
+//   } else {
+//     // AUTHENTICATED --> Access to any another route
+//     next();
+//     console.log("Autenticado")
+//   }
+// });
+  
 export default router;

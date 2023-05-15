@@ -43,9 +43,9 @@
                   >
                     <option
                       v-for="sb in serviceBulletins"
-                      v-bind:value="sb.service_bulleti_name + '-' + sb.part"
+                      v-bind:value="sb.service_bulleti_name"
                     >
-                      {{ sb.service_bulleti_name }}-{{ sb.part }}
+                      {{ sb.service_bulleti_name }}
                     </option>
                   </select>
                 </div>
@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import axios from "axios";
-import { ServiceBulletins } from "../types";
+import { ServiceBulletin } from "../types";
 export default {
   name: "AddItem",
   data() {
@@ -95,31 +95,11 @@ export default {
       result: null,
       //serviceBulletins: [] as ServiceBulletins[],
       serviceBulletins: [
-        {
-          service_bulleti_name: "SB-111-111-111",
-          part: "UNIQUE",
-        },
-        {
-          service_bulleti_name: "SB-111-111-112",
-          part: "UNIQUE",
-        },
-        {
-          service_bulleti_name: "SB-111-111-113",
-          part: "UNIQUE",
-        },
-        {
-          service_bulleti_name: "SB-111-111-114",
-          part: "PART 1",
-        },
-        {
-          service_bulleti_name: "SB-111-111-114",
-          part: "PART 2",
-        },
-        {
-          service_bulleti_name: "SB-111-111-114",
-          part: "PART 3",
-        },
-      ] as ServiceBulletins[],
+        { service_bulleti_name: "SB-111-111-111" },
+        { service_bulleti_name: "SB-111-111-112" },
+        { service_bulleti_name: "SB-111-111-113" },
+        { service_bulleti_name: "SB-111-111-114" },
+      ] as ServiceBulletin[],
       showCalculator: false,
       selectedServiceBulletin: null,
     };
@@ -143,18 +123,14 @@ export default {
     calculate: function () {
       const formula = this.operation;
       this.replaceOperators(formula);
-
-      // --- Old calc result ---
-      //let result = eval(this.operation);
-      //this.operation = result;
     },
 
     replaceOperators: function (formula: any) {
       // Change all operators * for &&
-      formula = formula.replace(/\*/g, "&&");
+      formula = formula.replace(/\*/g, "and");
 
       // Change all operators + for ||
-      formula = formula.replace(/\+/g, "||");
+      formula = formula.replace(/\+/g, "or");
 
       return console.log(formula);
     },
