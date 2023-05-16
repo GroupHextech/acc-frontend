@@ -30,8 +30,7 @@
                 </div>
                 <div class="field">
                   <p class="control">
-                    <button type="submit" class="button is-link" :class="{ 'p-button-loading': loading }"
-                      @click="login">
+                    <button type="submit" class="button is-link" :class="{ 'p-button-loading': loading }" @click="login">
                       <span v-if="!loading">Sign in</span>
                       <span v-else>
                         <i class="pi pi-spin pi-spinner"></i>
@@ -55,6 +54,7 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
 import LoginFailed from "../components/LoginFailed.vue";
+import Cookies from "js-cookie";
 
 export default defineComponent({
   name: "Login",
@@ -69,12 +69,19 @@ export default defineComponent({
     const loading = ref(false);
     const errorMessage = ref("");
 
+    const authToken = Cookies.get("authToken");
+    if (authToken) {
+      authStore.loginWithToken(authToken);
+    }
+
     async function login() {
       loading.value = true;
       try {
         if (await authStore.login(username.value, password.value)) {
           // Successful authentication
-          router.push({ name: "chassis" });
+          if (authStore.isAuthenticated) {
+            router.push({ name: "chassis" });
+          }
           console.log("Login deu certo!");
         } else {
           // Authentication failed, display LoginFailed
@@ -110,7 +117,7 @@ export default defineComponent({
       }
     }
     return {
-//      ...authStore,
+      //      ...authStore,
       username,
       password,
       loading,

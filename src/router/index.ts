@@ -17,65 +17,80 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "login",
     component: Login,
+    meta: { requiresAuth: false, redirectIfAuth: true },
   },
   {
     path: "/dashboard", 
     name: "Dashboard",
     component: Dashboard,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: "/items",
     name: "Items",
     component: Items,
     props: true,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: '/item/:id_item/:name_item',
     name: 'ItemDetail',
     component: ItemDetail,
     props: true,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: "/chassis",
     name: "chassis",
     component: Chassis,
     props: true,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: "/chassis/:chassi/sb",
     name: "chassi-sb",
     component: ChassiSB,
     props: true,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: "/chassis/:chassi/items",
     name: "chassi-items",
     component: ChassiItems,
     props: true,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: "/chassis/register",
     name: "register-chassi",
     component: RegisterChassi,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: PageNotFound,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, redirectIfAuth: false },
   },
 ];
 
+const authStore = useAuthStore();
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const redirectIfAuth = to.matched.some(record => record.meta.redirectIfAuth);
+
+  if (requiresAuth && !authStore.isAuthenticated) {
+    next({ name: "login" });
+  } else if (redirectIfAuth && authStore.isAuthenticated) {
+    next({ name: "chassis" });
+  } else {
+    next();
+  }
 });
 
 

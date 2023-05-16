@@ -1,46 +1,91 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import { ref } from "vue";
+import { ref, Ref } from "vue";
+import Cookies from 'js-cookie';
 
 export const useAuthStore = defineStore("auth", () => {
-  const isAuthenticated = ref();
-  const token = ref();
-  const user = ref();
-  const loginFailed = ref();
-  const authorization = ref();
+  const isAuthenticated: Ref<boolean> = ref(false);
+  const token: Ref<string | null> = ref(null);
+  const user: Ref<string | null> = ref(null);
+  const loginFailed: Ref<boolean> = ref(false);
+  const authorization: Ref<string | null> = ref(null);
 
-  async function login(username: string, password: string): Promise<boolean> {
-    try {
-      const response = await axios.post("/login", {
-        username: username,
-        password: password,
-      });
-      const data = response.data;
-      user.value = data.username;
-      token.value = data.token;
-      isAuthenticated.value = true;
-      console.log("isAuthenticated: "+ isAuthenticated.value);
-      loginFailed.value = false;
-      authorization.value = data.autorizacao;
-      console.log(data);
-      return true
-    } catch (ex) {
-      console.log("Login failed!");
-      loginFailed.value = true;
-      return false
+  async function login(usernameOrToken: string, password?: string): Promise<boolean> {
+    if (password) {
+      try {
+        const response = await axios.post("/login", {
+          username: usernameOrToken,
+          password: password,
+        });
+        const data = response.data;
+        user.value = data.username;
+        token.value = data.token;
+        if (token.value) {
+          loginFailed.value = false;
+          Cookies.set("authToken", token.value, { secure: true, expires: 7 });
+        } else {
+          loginFailed.value = true;
+        }
+        isAuthenticated.value = true;
+        authorization.value = data.autorizacao;
+        console.log(data);
+        console.log("isAuthenticated: "+ isAuthenticated.value);
+        return true
+      } catch (ex) {
+        console.log("Login failed!");
+        loginFailed.value = true;
+        return false
+      }
+    } else {
+      return await loginWithToken(usernameOrToken);
     }
   }
+
+  async function getUsernameFromToken(token: string): Promise<string | null> {
+    try {
+      const response = await axios.get("/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = response.data;
+      return data.username;
+    } catch (ex) {
+      // Tratamento de erro
+      return null;
+    }
+  }
+
+  async function loginWithToken(tokenValue: string): Promise<boolean> {
+    try {
+      const username = await getUsernameFromToken(tokenValue);
+      if (username) {
+        user.value = username;
+        token.value = tokenValue;
+        isAuthenticated.value = true;
+        return true;
+      } else { 
+        alert("User not found!");
+        return false;
+      }
+    } catch (ex) {
+      alert("Login error with token");
+      return false;
+    }
+  }
+  
 
   async function logout(): Promise<void> {
     try {
       await axios.post("/logout");
       user.value = null;
       token.value = null;
+      Cookies.remove("authToken");
       isAuthenticated.value = false;
       loginFailed.value = false;
       authorization.value = null;
     } catch (ex) {
-      // Logout error
+      console.log("Logout failed!");
     }
   }
 
@@ -62,6 +107,7 @@ export const useAuthStore = defineStore("auth", () => {
     loginFailed,
     authorization,
     login,
+    loginWithToken,
     logout,
     hasPermission,
   }
