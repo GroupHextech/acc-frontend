@@ -8,7 +8,6 @@ import Items from "../views/Items.vue";
 import ItemDetail from "../views/ItemDetail.vue";
 import RegisterChassi from "../views/RegisterChassi.vue";
 import PageNotFound from "../views/PageNotFound.vue";
-import { useAuthStore } from "../store/auth";
 
 // createWebHistory(import.meta.env.BASE_URL),
 
@@ -74,44 +73,23 @@ const routes: Array<RouteRecordRaw> = [
   },
 ];
 
-const authStore = useAuthStore();
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 
 router.beforeEach((to, from, next) => {
+  const token = sessionStorage.getItem('authToken');
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const redirectIfAuth = to.matched.some(record => record.meta.redirectIfAuth);
 
-  if (requiresAuth && !authStore.isAuthenticated) {
+  if (requiresAuth && !token) {
     next({ name: "login" });
-  } else if (redirectIfAuth && authStore.isAuthenticated) {
+  } else if (redirectIfAuth && token) {
     next({ name: "chassis" });
   } else {
     next();
   }
 });
-
-
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuthStore();
-//   const token = authStore.token;
-//   const isAuthenticated = authStore.isAuthenticated;
-
-//   if (to.meta.requiresAuth && !isAuthenticated && !token) {
-//     // NOT AUTHENTICATED --> Redirect to login page
-//     next("/");
-//     console.log("isAuthenticated "+ isAuthenticated)
-//   } else if (to.name === "login" && token) {
-//     // AUTHENTICATED --> Trying to access the login page
-//     next("/chassis");
-//     console.log("Indo pra tela de chassis")
-//   } else {
-//     // AUTHENTICATED --> Access to any another route
-//     next();
-//     console.log("Autenticado")
-//   }
-// });
   
 export default router;

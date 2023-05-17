@@ -19,7 +19,7 @@
           >
             <div class="card">
               <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
-              <div class="buttons is-centered" v-if="hasPermission('allowed')">
+              <div class="buttons is-centered">
                 <router-link
                   class="button is-link is-light is-rounded is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/sb'"
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { useAuthStore } from '../store/auth';
+import { useAuthStore } from "../store/auth";
 import { Chassi } from "../types";
 import axios from "axios";
 import Loading from "../components/Loading.vue";
@@ -73,7 +73,13 @@ export default {
     async loadData() {
       try {
         this.isLoading = true;
-        const response = await axios.get("/chassi/list");
+        const token1 = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: token1,
+          },
+        };
+        const response = await axios.get("/chassi/list", config);
         this.chassisList = response.data;
       } catch (error) {
         console.error(error);
@@ -101,7 +107,7 @@ export default {
   flex-basis: auto;
   padding: 0.3rem;
 }
-.card{
+.card {
   padding: 0.5em;
   background-color: #eff1fa;
   border: 1px #dbdbdb solid;
