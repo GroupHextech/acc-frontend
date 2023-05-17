@@ -51,15 +51,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
+import axios from 'axios';
+import { Item } from '../types';
 
-import { Item } from "../types";
+// Stores
 import { useItemsStore } from "../store/items";
 
-import axios from "axios";
-
-import AddItem from "./AddItem.vue";
-import Loading from "./Loading.vue";
+// Components
+import Loading from './Loading.vue';
+import AddItem from './AddItem.vue';
 
 export default defineComponent({
   name: "ItemList",
@@ -96,7 +97,13 @@ export default defineComponent({
     async loadData() {
       try {
         this.isLoading = true;
-        const response = await axios.get<Item[]>("/item/listall");
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get<Item[]>("/item/listall", config);
         this.$emit("update:items", response.data);
       } catch (error) {
         console.error(error);
@@ -140,7 +147,7 @@ export default defineComponent({
     });
   },
 });
-</script>
+</script> -->
 
 <style scoped>
 .buttons {

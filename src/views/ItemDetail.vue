@@ -7,19 +7,30 @@
           <ul>
             <li><router-link to="/items">items</router-link></li>
             <li>
-              <router-link :to="{ name: 'ItemDetail', params: { id_item: id_item, name_item: name_item } }">
-                {{ id_item }} / {{ name_item }}
+              <router-link
+                :to="{
+                  name: 'ItemDetail',
+                  params: { id_item: id_item, name_item: name_item },
+                }"
+              >
+                {{ name_item }}
               </router-link>
             </li>
           </ul>
         </nav>
         <!-- All content here -->
-        <div class="content">
-          <div class="card block" v-for="chassi in chassis" :key="chassi.chassi_id">
-            {{ chassi }}
-          </div>
-          <div class="block" v-if="isLoading">
-            <loading />
+        <div v-if="isLoading">
+          <loading />
+        </div>
+        <div class="columns">
+          <div
+            class="column is-3"
+            v-for="chassi in chassis"
+            :key="chassi.chassi_id"
+          >
+            <div class="card">
+              <p class="subtitle is-5">{{ chassi }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -31,7 +42,7 @@
 import { defineComponent } from "vue";
 import { useItemsStore } from "../store/items";
 import Loading from "../components/Loading.vue";
-import { Chassi } from '../types';
+import { Chassi } from "../types";
 import axios from "axios";
 
 export default defineComponent({
@@ -39,11 +50,11 @@ export default defineComponent({
   props: {
     id_item: {
       type: Number,
-      required: true
+      required: true,
     },
     name_item: {
       type: String,
-      required: true
+      required: true,
     },
   },
   components: {
@@ -69,9 +80,18 @@ export default defineComponent({
       try {
         this.isLoading = true;
         let response;
-        if (typeof this.id_item === 'number') {
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        if (typeof this.id_item === "number") {
           // Search by ID
-          response = await axios.get("/item/listchassi/" + this.id_item);
+          response = await axios.get(
+            "/item/listchassi/" + this.id_item,
+            config
+          );
         } else {
           // Search by name
           const newItemName = this.name_item
@@ -83,7 +103,7 @@ export default defineComponent({
             .replaceAll("â", "a")
             .replaceAll("/", "")
             .toLowerCase();
-          response = await axios.get("/item/listchassi/" + newItemName);
+          response = await axios.get("/item/listchassi/" + newItemName, config);
         }
         console.log(response.data);
         const chassis = response.data;
@@ -104,6 +124,16 @@ export default defineComponent({
 <style scoped>
 .title {
   text-align: start;
+}
+.columns:not(.is-desktop) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.column {
+  flex-basis: auto;
+  padding: 0.3rem;
+  flex-grow: 0;
 }
 .card {
   padding: 0.5em;

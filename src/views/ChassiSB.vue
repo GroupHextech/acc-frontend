@@ -46,6 +46,7 @@
                 </td>
                 <td v-else-if="sb.status === 'APPLICABLE'">
                   <a href="#" @click="confirmChangeCheck(sb)"
+                    v-if="hasPermission('restrict')"
                     ><i class="pi pi-circle check"></i
                   ></a>
                 </td>
@@ -76,6 +77,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useAuthStore } from "../store/auth";
 import { ServiceBulletin } from "../types";
 import Loading from "../components/Loading.vue";
 
@@ -92,6 +94,12 @@ export default defineComponent({
   setup(props) {
     const serviceBulletins = ref<ServiceBulletin[]>([]);
     const isLoading = ref(true);
+
+    const authStore = useAuthStore();
+
+    function hasPermission(permission: 'allowed' | 'restrict'): boolean {
+      return authStore.hasPermission(permission);
+    };
 
     const confirmChangeCheck = async (sb: ServiceBulletin) => {
       try {
@@ -130,7 +138,7 @@ export default defineComponent({
           Swal.fire("Changes are not saved", "", "info");
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
         Swal.fire("Error occurred", "", "error");
       }
     };
@@ -138,10 +146,16 @@ export default defineComponent({
     const loadData = async () => {
       try {
         isLoading.value = true;
-        const response = await axios.get("/bulletins/listar/" + props.chassi);
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get("/bulletins/listar/" + props.chassi, config);
         serviceBulletins.value = response.data;
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         isLoading.value = false;
       }
@@ -151,6 +165,8 @@ export default defineComponent({
 
     return {
       serviceBulletins,
+      authStore,
+      hasPermission,
       isLoading,
       confirmChangeCheck,
     };
