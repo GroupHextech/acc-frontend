@@ -9,7 +9,12 @@
               <div class="box">
                 <div class="field">
                   <p class="control has-icons-left">
-                    <input class="input" type="email" placeholder="Username" v-model="username" />
+                    <input
+                      class="input"
+                      type="email"
+                      placeholder="Username"
+                      v-model="username"
+                    />
                     <span class="icon is-small is-left">
                       <i class="pi pi-user"></i>
                     </span>
@@ -17,7 +22,13 @@
                 </div>
                 <div class="field has-addons">
                   <p class="control has-icons-left is-expanded">
-                    <input id="password" class="input" type="password" placeholder="Password" v-model="password" />
+                    <input
+                      id="password"
+                      class="input"
+                      type="password"
+                      placeholder="Password"
+                      v-model="password"
+                    />
                     <span class="icon is-small is-left">
                       <i class="pi pi-lock"></i>
                     </span>
@@ -30,8 +41,12 @@
                 </div>
                 <div class="field">
                   <p class="control">
-                    <button type="submit" class="button is-link" :class="{ 'p-button-loading': loading }"
-                      @click="login">
+                    <button
+                      type="submit"
+                      class="button is-link"
+                      :class="{ 'p-button-loading': loading }"
+                      @click="login"
+                    >
                       <span v-if="!loading">Sign in</span>
                       <span v-else>
                         <i class="pi pi-spin pi-spinner"></i>
@@ -41,6 +56,7 @@
                 </div>
               </div>
               <LoginFailed v-if="loginFailed" @close="loginFailed = false" />
+              <LoginSuccess v-if="loginSuccess" @close="loginSuccess = false" />
             </div>
             <div class="column"></div>
           </div>
@@ -55,16 +71,18 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
 import LoginFailed from "../components/LoginFailed.vue";
+import LoginSuccess from "../components/LoginSuccess.vue";
 
 export default defineComponent({
   name: "Login",
-  components: { LoginFailed },
+  components: { LoginFailed, LoginSuccess },
   setup() {
     const username = ref("");
     const password = ref("");
     const authStore = useAuthStore();
     const router = useRouter();
     const loginFailed = ref(false);
+    const loginSuccess = ref(false);
 
     const loading = ref(false);
     const errorMessage = ref("");
@@ -74,20 +92,25 @@ export default defineComponent({
       try {
         if (await authStore.login(username.value, password.value)) {
           // Successful authentication
-          router.push({ name: "chassis" });
-          console.log("Login deu certo!");
+          loginSuccess.value = true;
+          setTimeout(() => {
+            if (authStore.isAuthenticated) {
+              router.push({ name: "chassis" });
+            }
+          }, 1000);
         } else {
           // Authentication failed, display LoginFailed
           loginFailed.value = true;
-          console.log("Login falhou no componente")
         }
       } catch (error: any) {
         // Error handling
         if (error.response && error.response.status === 401) {
-          console.log("Invalid credentials. Please check your username and password.");
-          password.value = ''; // Clear the password field.
+          alert(
+            "Invalid credentials. Please check your username and password."
+          );
+          password.value = ""; // Clear the password field.
         } else {
-          console.log("An error occurred during login. Please try again.");
+          alert("An error occurred during login. Please try again.");
         }
       } finally {
         loading.value = false;
@@ -110,12 +133,12 @@ export default defineComponent({
       }
     }
     return {
-//      ...authStore,
       username,
       password,
       loading,
       login,
       loginFailed,
+      loginSuccess,
       errorMessage,
       showPassword,
     };
