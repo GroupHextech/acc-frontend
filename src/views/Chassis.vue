@@ -12,28 +12,17 @@
           <loading />
         </div>
         <div class="columns">
-          <div
-            class="column is-3"
-            v-for="chassi in chassisList"
-            :key="chassi.chassi_id"
-          >
+          <div class="column is-3" v-for="chassi in chassisList" :key="chassi.chassi_id">
+
             <div class="card">
-              <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
-              <div class="buttons is-centered">
-                <router-link
-                  class="button is-link is-light is-rounded is-small"
-                  :to="'/chassis/' + chassi.chassi_id + '/sb'"
-                  v-if="hasPermission('allowed')"
-                >
-                  Service Bulletins
-                </router-link>
-                <router-link
-                  class="button is-link is-light is-rounded is-small"
-                  :to="'/chassis/' + chassi.chassi_id + '/items'"
-                >
-                  Items
-                </router-link>
+              <div class="card-content">
+                <p class="subtitle is-5">{{ chassi.chassi_id }}</p>
               </div>
+              <footer class="card-footer">
+                <router-link class="card-footer-item" :to="'/chassis/' + chassi.chassi_id + '/sb'"
+                  v-if="hasPermission('allowed')">Service Bulletins</router-link>
+                <router-link class="card-footer-item" :to="'/chassis/' + chassi.chassi_id + '/items'">Items</router-link>
+              </footer>
             </div>
           </div>
         </div>
@@ -99,16 +88,19 @@ export default {
 .title {
   text-align: start;
 }
+
 .columns:not(.is-desktop) {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 .column {
   flex-basis: auto;
   padding: 0.3rem;
   flex-grow: 0;
 }
+
 .card {
   padding: 0.5em;
   background-color: #eff1fa;
