@@ -25,7 +25,7 @@ export const useAuthStore = defineStore("auth", () => {
           loginFailed.value = true;
         }
         isAuthenticated.value = true;
-        authorization.value = data.autorizacao;
+        authorization.value = data.auth;
         return true
       } catch (ex) {
         alert("Login failed!");
@@ -47,17 +47,20 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  function hasPermission(permission: string): boolean {
+  function hasPermission(permission: "allowed" | "restrict"): boolean {
     if (!authorization.value) {
       return false;
     }
-    if (authorization.value === "ADM") {
-      return permission !== "restrict";
-    } else if (authorization.value === "EDITOR") {
-      return permission === "allowed";
+  
+    if (permission === "allowed") {
+      return authorization.value === "ROLE_EDITOR" || authorization.value === "ROLE_ADM";
+    } else if (permission === "restrict") {
+      return authorization.value === "ROLE_ADM";
     }
-    return true; // if there is no restriction
+  
+    return false;
   }
+
   return { 
     isAuthenticated,
     token,

@@ -23,6 +23,7 @@
                 <router-link
                   class="button is-link is-light is-rounded is-small"
                   :to="'/chassis/' + chassi.chassi_id + '/sb'"
+                  v-if="hasPermission('allowed')"
                 >
                   Service Bulletins
                 </router-link>
@@ -51,9 +52,9 @@ export default {
   setup() {
     const authStore = useAuthStore();
 
-    function hasPermission(permission: string): boolean {
+    function hasPermission(permission: 'allowed' | 'restrict'): boolean {
       return authStore.hasPermission(permission);
-    }
+    };
 
     return {
       authStore,
@@ -73,16 +74,16 @@ export default {
     async loadData() {
       try {
         this.isLoading = true;
-        const token1 = sessionStorage.getItem("authToken");
+        const authToken = sessionStorage.getItem("authToken");
         const config = {
           headers: {
-            authorization: token1,
+            authorization: authToken,
           },
         };
         const response = await axios.get("/chassi/list", config);
         this.chassisList = response.data;
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         this.isLoading = false;
       }
@@ -106,6 +107,7 @@ export default {
 .column {
   flex-basis: auto;
   padding: 0.3rem;
+  flex-grow: 0;
 }
 .card {
   padding: 0.5em;

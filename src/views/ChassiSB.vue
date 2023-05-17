@@ -44,22 +44,32 @@
                 >
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
-                <td v-else-if="sb.status === 'APPLICABLE'">
-                  <a href="#" @click="confirmChangeCheck(sb)"
+                <td v-else>
+                  <a href="#" @click="confirmChangeCheck(sb, 'INCORPORATED')"
+                    v-if="hasPermission('allowed')"
                     ><i class="pi pi-circle check"></i
                   ></a>
                 </td>
-                <td v-else></td>
                 <!-- Applicable -->
                 <td v-if="sb.status === 'APPLICABLE'">
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
-                <td v-else></td>
+                <td v-else>
+                  <a href="#" @click="confirmChangeCheck(sb, 'APPLICABLE')"
+                    v-if="hasPermission('restrict')"
+                    ><i class="pi pi-circle check"></i
+                  ></a>
+                </td>
                 <!-- Not Applicable -->
                 <td v-if="sb.status === 'NOT APPLICABLE'">
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
-                <td v-else></td>
+                <td v-else>
+                  <a href="#" @click="confirmChangeCheck(sb, 'NOT APPLICABLE')"
+                    v-if="hasPermission('restrict')"
+                    ><i class="pi pi-circle check"></i
+                  ></a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -76,6 +86,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useAuthStore } from "../store/auth";
 import { ServiceBulletin } from "../types";
 import Loading from "../components/Loading.vue";
 
@@ -93,10 +104,16 @@ export default defineComponent({
     const serviceBulletins = ref<ServiceBulletin[]>([]);
     const isLoading = ref(true);
 
-    const confirmChangeCheck = async (sb: ServiceBulletin) => {
+    const authStore = useAuthStore();
+
+    function hasPermission(permission: 'allowed' | 'restrict'): boolean {
+      return authStore.hasPermission(permission);
+    };
+
+    const confirmChangeCheck = async (sb: ServiceBulletin, status: string) => {
       try {
         const currentStatus = sb.status;
-        const futureStatus = "INCORPORATED";
+        const futureStatus = status;
 
         const result = await Swal.fire({
           html: `
@@ -130,7 +147,7 @@ export default defineComponent({
           Swal.fire("Changes are not saved", "", "info");
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
         Swal.fire("Error occurred", "", "error");
       }
     };
@@ -138,10 +155,16 @@ export default defineComponent({
     const loadData = async () => {
       try {
         isLoading.value = true;
-        const response = await axios.get("/bulletins/listar/" + props.chassi);
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get("/bulletins/listar/" + props.chassi, config);
         serviceBulletins.value = response.data;
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         isLoading.value = false;
       }
@@ -151,6 +174,8 @@ export default defineComponent({
 
     return {
       serviceBulletins,
+      authStore,
+      hasPermission,
       isLoading,
       confirmChangeCheck,
     };
