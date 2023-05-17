@@ -44,23 +44,32 @@
                 >
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
-                <td v-else-if="sb.status === 'APPLICABLE'">
-                  <a href="#" @click="confirmChangeCheck(sb)"
-                    v-if="hasPermission('restrict')"
+                <td v-else>
+                  <a href="#" @click="confirmChangeCheck(sb, 'INCORPORATED')"
+                    v-if="hasPermission('allowed')"
                     ><i class="pi pi-circle check"></i
                   ></a>
                 </td>
-                <td v-else></td>
                 <!-- Applicable -->
                 <td v-if="sb.status === 'APPLICABLE'">
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
-                <td v-else></td>
+                <td v-else>
+                  <a href="#" @click="confirmChangeCheck(sb, 'APPLICABLE')"
+                    v-if="hasPermission('restrict')"
+                    ><i class="pi pi-circle check"></i
+                  ></a>
+                </td>
                 <!-- Not Applicable -->
                 <td v-if="sb.status === 'NOT APPLICABLE'">
                   <i class="pi pi-check" style="color: green"></i>
                 </td>
-                <td v-else></td>
+                <td v-else>
+                  <a href="#" @click="confirmChangeCheck(sb, 'NOT APPLICABLE')"
+                    v-if="hasPermission('restrict')"
+                    ><i class="pi pi-circle check"></i
+                  ></a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -101,10 +110,10 @@ export default defineComponent({
       return authStore.hasPermission(permission);
     };
 
-    const confirmChangeCheck = async (sb: ServiceBulletin) => {
+    const confirmChangeCheck = async (sb: ServiceBulletin, status: string) => {
       try {
         const currentStatus = sb.status;
-        const futureStatus = "INCORPORATED";
+        const futureStatus = status;
 
         const result = await Swal.fire({
           html: `

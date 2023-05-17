@@ -93,6 +93,7 @@ export default defineComponent({
         if (await authStore.login(username.value, password.value)) {
           // Successful authentication
           loginSuccess.value = true;
+          loginFailed.value = false;
           setTimeout(() => {
             if (authStore.isAuthenticated) {
               router.push({ name: "chassis" });

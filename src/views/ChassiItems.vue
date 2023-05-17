@@ -94,7 +94,13 @@ export default defineComponent({
     async loadData() {
       try {
         this.isLoading = true;
-        const response = await axios.get("/items/list/" + this.chassi);
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get("/items/list/" + this.chassi, config);
         console.log(response.data);
         const items = response.data;
 
