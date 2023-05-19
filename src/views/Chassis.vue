@@ -64,6 +64,7 @@ export default {
       try {
         this.isLoading = true;
         const authToken = sessionStorage.getItem("authToken");
+        console.log(authToken);
         const config = {
           headers: {
             authorization: authToken,
