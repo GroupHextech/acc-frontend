@@ -5,27 +5,17 @@
     <div class="container">
       <div class="field is-grouped">
         <p class="control is-expanded">
-          <input class="input is-link" type="text" placeholder="Item name" />
+          <input class="input is-link" type="text" placeholder="Item name" v-model="itemName" />
         </p>
         <p class="control">
-          <i
-            class="button is-link is-outlined pi pi-angle-down"
-            v-on:click="showCalculator = true"
-          ></i>
+          <i class="button is-link is-outlined pi pi-angle-down" v-on:click="showCalculator = true"></i>
         </p>
       </div>
       <div class="container block" id="calculator" v-if="showCalculator">
         <p class="subtitle">Add formula</p>
         <div class="columns is-multiline is-mobile">
           <div class="column is-9">
-            <textarea
-              class="textarea"
-              disabled
-              v-model="operation"
-              rows="2"
-              cols="50"
-              autoresize
-            ></textarea>
+            <textarea class="textarea" disabled v-model="operation" rows="2" cols="50" autoresize></textarea>
           </div>
           <div class="column is-3">
             <button class="button is-danger is-fullwidth" @click="clear()">
@@ -36,15 +26,9 @@
             <div class="field has-addons">
               <div class="control is-expanded">
                 <div class="select is-fullwidth">
-                  <select
-                    name="service-bulletin"
-                    v-model="selectedServiceBulletin"
-                    @change="addValue(selectedServiceBulletin)"
-                  >
-                    <option
-                      v-for="sb in serviceBulletins"
-                      v-bind:value="sb.service_bulleti_name"
-                    >
+                  <select name="service-bulletin" v-model="selectedServiceBulletin"
+                    @change="addValue(selectedServiceBulletin)">
+                    <option v-for="sb in serviceBulletins" v-bind:value="sb.service_bulleti_name">
                       {{ sb.service_bulleti_name }}
                     </option>
                   </select>
@@ -55,11 +39,8 @@
           <div class="column is-12">
             <div class="columns is-multiline is-mobile">
               <div class="column is-3" v-for="key in operator" :key="key">
-                <a
-                  @click="addValue(key)"
-                  href="#"
-                  class="button is-primary is-fullwidth"
-                  ><span v-if="key === ' * '">AND</span>
+                <a @click="addValue(key)" href="#" class="button is-primary is-fullwidth"><span
+                    v-if="key === ' * '">AND</span>
                   <span v-else-if="key === ' + '">OR</span>
                   <span v-else>{{ key }}</span>
                 </a>
@@ -73,7 +54,7 @@
       </div>
       <div class="field is-grouped is-grouped-right">
         <p class="control">
-          <a class="button is-link"> Submit </a>
+          <a class="button is-link" @click="submitItem"> Submit </a>
         </p>
         <p class="control">
           <a class="button is-light" @click="closeModal"> Cancel </a>
@@ -90,30 +71,68 @@ export default {
   name: "AddItem",
   data() {
     return {
+      itemName: "",
       operator: [" * ", " + ", "(", ")"],
       operation: "",
       result: null,
-      //serviceBulletins: [] as ServiceBulletins[],
-      serviceBulletins: [
-        { service_bulleti_name: "SB-111-111-111" },
-        { service_bulleti_name: "SB-111-111-112" },
-        { service_bulleti_name: "SB-111-111-113" },
-        { service_bulleti_name: "SB-111-111-114" },
-      ] as ServiceBulletin[],
+      serviceBulletins: [] as ServiceBulletin[],
+      // serviceBulletins: [
+      //   { service_bulleti_name: "SB-111-111-111" },
+      //   { service_bulleti_name: "SB-111-111-112" },
+      //   { service_bulleti_name: "SB-111-111-113" },
+      //   { service_bulleti_name: "SB-111-111-114" },
+      // ] as ServiceBulletin[],
       showCalculator: false,
       selectedServiceBulletin: null,
     };
   },
+  created() {
+    this.loadData();
+  },
   computed: {},
   methods: {
-    /*async loadData() {
+    async loadData() {
       try {
-        const response = await axios.get("/bulletin/list/all");
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get("/bulletin/list/all", config);
         this.serviceBulletins = response.data;
       } catch (error) {
         console.error(error);
       }
-    },*/
+    },
+
+    async submitItem() {
+      try {
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+
+        const itemName = this.itemName;
+        let formula: string = this.operation;
+
+        formula = this.replaceOperators(formula);
+
+        const data = {
+          itemName: itemName,
+          formula: formula
+        };
+
+        const response = await axios.post("/register/formula", data, config);
+        console.log(response);
+
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
     addValue: function (element: any) {
       if (typeof this.operation !== "string") {
         this.clear();
@@ -126,13 +145,13 @@ export default {
     },
 
     replaceOperators: function (formula: any) {
-      // Change all operators * for &&
+      // Change all operators '*' for 'and'
       formula = formula.replace(/\*/g, "and");
 
-      // Change all operators + for ||
+      // Change all operators '+' for 'or'
       formula = formula.replace(/\+/g, "or");
 
-      return console.log(formula);
+      return formula;
     },
 
     clear: function () {
@@ -151,12 +170,14 @@ export default {
   padding: 20px;
   border-radius: 5px;
 }
+
 #calculator {
   /*background-color: #eff1fa;*/
   border: 1px #dbdbdb solid;
   border-radius: 10px;
   padding: 1rem;
 }
+
 .textarea[disabled] {
   border-color: #dbdbdb;
 }
