@@ -108,9 +108,9 @@ export default defineComponent({
         const applicable = [...items.applicable];
 
         this.items = incorporated
-           .concat(applicable)
-           //.concat(notApplicable)
-           .map((item) => ({ name_item: item.name_item, status: item.status }));
+          .concat(applicable)
+          .map((item) => ({ name_item: item.name_item, status: item.status }));
+
       } catch (error) {
         console.error(error);
       } finally {

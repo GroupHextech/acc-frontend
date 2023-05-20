@@ -5,7 +5,12 @@
     <div class="container">
       <div class="field is-grouped">
         <p class="control is-expanded">
-          <input class="input is-link" type="text" placeholder="Item name" />
+          <input
+            class="input is-link"
+            type="text"
+            placeholder="Item name"
+            v-model="itemName"
+          />
         </p>
         <p class="control">
           <i
@@ -43,9 +48,9 @@
                   >
                     <option
                       v-for="sb in serviceBulletins"
-                      v-bind:value="sb.service_bulleti_name"
+                      v-bind:value="sb.name"
                     >
-                      {{ sb.service_bulleti_name }}
+                      {{ sb.name }}
                     </option>
                   </select>
                 </div>
@@ -73,7 +78,7 @@
       </div>
       <div class="field is-grouped is-grouped-right">
         <p class="control">
-          <a class="button is-link"> Submit </a>
+          <a class="button is-link" @click="submitItem"> Submit </a>
         </p>
         <p class="control">
           <a class="button is-light" @click="closeModal"> Cancel </a>
@@ -90,30 +95,75 @@ export default {
   name: "AddItem",
   data() {
     return {
+      itemName: "",
       operator: [" * ", " + ", "(", ")"],
       operation: "",
       result: null,
-      //serviceBulletins: [] as ServiceBulletins[],
-      serviceBulletins: [
-        { service_bulleti_name: "SB-111-111-111" },
-        { service_bulleti_name: "SB-111-111-112" },
-        { service_bulleti_name: "SB-111-111-113" },
-        { service_bulleti_name: "SB-111-111-114" },
-      ] as ServiceBulletin[],
+      serviceBulletins: [] as ServiceBulletin[],
+      // serviceBulletins: [
+      //   { service_bulleti_name: "SB-111-111-111" },
+      //   { service_bulleti_name: "SB-111-111-112" },
+      //   { service_bulleti_name: "SB-111-111-113" },
+      //   { service_bulleti_name: "SB-111-111-114" },
+      // ] as ServiceBulletin[],
       showCalculator: false,
       selectedServiceBulletin: null,
     };
   },
+  created() {
+    this.loadData();
+  },
   computed: {},
   methods: {
-    /*async loadData() {
+    async loadData() {
       try {
-        const response = await axios.get("/bulletin/list/all");
-        this.serviceBulletins = response.data;
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get("/bulletin/list/all", config);
+
+        this.serviceBulletins = response.data.map((bulletin: any) => {
+          return {
+            // nome do type.ts -- nome do endpoint
+            name: bulletin.service_bulletin_name,
+            part: bulletin.service_bulletin_part,
+          };
+        });
       } catch (error) {
         console.error(error);
       }
-    },*/
+    },
+
+    async submitItem() {
+      try {
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+
+        const itemName = this.itemName;
+        let formula: string = this.operation;
+
+        formula = this.replaceOperators(formula);
+
+        const data = {
+          // como tá no back -- como ta no front
+          item: itemName,
+          formula_desc: formula,
+        };
+
+        const response = await axios.post("/register/formula", data, config);
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
     addValue: function (element: any) {
       if (typeof this.operation !== "string") {
         this.clear();
@@ -126,13 +176,13 @@ export default {
     },
 
     replaceOperators: function (formula: any) {
-      // Change all operators * for &&
+      // Change all operators '*' for 'and'
       formula = formula.replace(/\*/g, "and");
 
-      // Change all operators + for ||
+      // Change all operators '+' for 'or'
       formula = formula.replace(/\+/g, "or");
 
-      return console.log(formula);
+      return formula;
     },
 
     clear: function () {
@@ -151,12 +201,14 @@ export default {
   padding: 20px;
   border-radius: 5px;
 }
+
 #calculator {
   /*background-color: #eff1fa;*/
   border: 1px #dbdbdb solid;
   border-radius: 10px;
   padding: 1rem;
 }
+
 .textarea[disabled] {
   border-color: #dbdbdb;
 }
