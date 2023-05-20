@@ -110,6 +110,7 @@ export default defineComponent({
         this.items = incorporated
           .concat(applicable)
           .map((item) => ({ name_item: item.name_item, status: item.status }));
+
       } catch (error) {
         console.error(error);
       } finally {
