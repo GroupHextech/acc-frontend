@@ -5,17 +5,32 @@
     <div class="container">
       <div class="field is-grouped">
         <p class="control is-expanded">
-          <input class="input is-link" type="text" placeholder="Item name" v-model="itemName" />
+          <input
+            class="input is-link"
+            type="text"
+            placeholder="Item name"
+            v-model="itemName"
+          />
         </p>
         <p class="control">
-          <i class="button is-link is-outlined pi pi-angle-down" v-on:click="showCalculator = true"></i>
+          <i
+            class="button is-link is-outlined pi pi-angle-down"
+            v-on:click="showCalculator = true"
+          ></i>
         </p>
       </div>
       <div class="container block" id="calculator" v-if="showCalculator">
         <p class="subtitle">Add formula</p>
         <div class="columns is-multiline is-mobile">
           <div class="column is-9">
-            <textarea class="textarea" disabled v-model="operation" rows="2" cols="50" autoresize></textarea>
+            <textarea
+              class="textarea"
+              disabled
+              v-model="operation"
+              rows="2"
+              cols="50"
+              autoresize
+            ></textarea>
           </div>
           <div class="column is-3">
             <button class="button is-danger is-fullwidth" @click="clear()">
@@ -26,10 +41,16 @@
             <div class="field has-addons">
               <div class="control is-expanded">
                 <div class="select is-fullwidth">
-                  <select name="service-bulletin" v-model="selectedServiceBulletin"
-                    @change="addValue(selectedServiceBulletin)">
-                    <option v-for="sb in serviceBulletins" v-bind:value="sb.service_bulleti_name">
-                      {{ sb.service_bulleti_name }}
+                  <select
+                    name="service-bulletin"
+                    v-model="selectedServiceBulletin"
+                    @change="addValue(selectedServiceBulletin)"
+                  >
+                    <option
+                      v-for="sb in serviceBulletins"
+                      v-bind:value="sb.name"
+                    >
+                      {{ sb.name }}
                     </option>
                   </select>
                 </div>
@@ -39,8 +60,11 @@
           <div class="column is-12">
             <div class="columns is-multiline is-mobile">
               <div class="column is-3" v-for="key in operator" :key="key">
-                <a @click="addValue(key)" href="#" class="button is-primary is-fullwidth"><span
-                    v-if="key === ' * '">AND</span>
+                <a
+                  @click="addValue(key)"
+                  href="#"
+                  class="button is-primary is-fullwidth"
+                  ><span v-if="key === ' * '">AND</span>
                   <span v-else-if="key === ' + '">OR</span>
                   <span v-else>{{ key }}</span>
                 </a>
@@ -100,7 +124,14 @@ export default {
           },
         };
         const response = await axios.get("/bulletin/list/all", config);
-        this.serviceBulletins = response.data;
+
+        this.serviceBulletins = response.data.map((bulletin: any) => {
+          return {
+            // nome do type.ts -- nome do endpoint
+            name: bulletin.service_bulletin_name,
+            part: bulletin.service_bulletin_part,
+          };
+        });
       } catch (error) {
         console.error(error);
       }
@@ -121,13 +152,13 @@ export default {
         formula = this.replaceOperators(formula);
 
         const data = {
-          itemName: itemName,
-          formula: formula
+          // como tá no back -- como ta no front
+          item: itemName,
+          formula_desc: formula,
         };
 
         const response = await axios.post("/register/formula", data, config);
         console.log(response);
-
       } catch (error) {
         console.error(error);
       }
