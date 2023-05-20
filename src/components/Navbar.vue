@@ -8,26 +8,25 @@
         </a>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample"
-          v-if="isLoggedIn">
+          v-if="isLoggedIn" @click="toggleMenuActive">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
 
-      <div id="navbarBasicExample" class="navbar-menu" v-if="isLoggedIn">
+      <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active': isMenuActive }" v-if="isLoggedIn">
 
         <div class="navbar-start">
-          <a class="navbar-item"> Home </a>
-          <router-link class="navbar-item" to="/dashboard">Dashboard</router-link>
+          <router-link class="navbar-item" to="/dashboard" @click="handleMenuButtonClick">Dashboard</router-link>
           <div class="navbar-item has-dropdown is-hoverable">
-            <router-link class="navbar-link" to="/chassis">Chassis</router-link>
+            <router-link class="navbar-link" to="/chassis" @click="handleMenuButtonClick">Chassis</router-link>
             <div class="navbar-dropdown">
-              <router-link class="navbar-item" to="/chassis/register">Add chassis</router-link>
+              <router-link class="navbar-item" to="/chassis/register" @click="handleMenuButtonClick">Add chassis</router-link>
             </div>
           </div>
-          <router-link class="navbar-item" to="/items">Items</router-link>
-          <a class="navbar-item">Service Bulletins</a>
+          <router-link class="navbar-item" to="/items" @click="handleMenuButtonClick">Items</router-link>
+          <a class="navbar-item" @click="handleMenuButtonClick">Service Bulletins</a>
         </div>
 
         <div class="navbar-end" v-bind:class="{ 'is-centered': isMenuActive }">
@@ -43,33 +42,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
 
 export default defineComponent({
   name: "Navbar",
-  mounted() {
-    $(document).ready(() => {
-    // Check for click events on the navbar burger icon
-    $(".navbar-burger").click(() => {
-      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-      $(".navbar-burger").toggleClass("is-active");
-      $(".navbar-menu").toggleClass("is-active");
-    });
-
-    // Add click event listener to menu links
-    $(".navbar-menu a").click(() => {
-      // Remove "is-active" class from burger and menu
-      $(".navbar-burger").removeClass("is-active");
-      $(".navbar-menu").removeClass("is-active");
-    });
-  });
-  },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const authStore = useAuthStore();
+    const isMenuActive = ref(false);
 
     const isLoggedIn = computed(() => {
       // Verifica se o usuário está na rota de login
@@ -80,10 +63,18 @@ export default defineComponent({
       return true;
     });
 
-    const isMenuActive = computed(() => {
-      const navbarBurger = document.querySelector('.navbar-burger');
-      return navbarBurger && navbarBurger.classList.contains('is-active');
+    watch(isLoggedIn, () => {
+      // Fechar o menu quando o usuário fizer login
+      isMenuActive.value = false;
     });
+
+    function toggleMenuActive() {
+      isMenuActive.value = !isMenuActive.value;
+    }
+
+    function handleMenuButtonClick() {
+      isMenuActive.value = false;
+    }
 
     async function logout() {
       await authStore.logout();
@@ -93,6 +84,8 @@ export default defineComponent({
     return {
       isLoggedIn,
       isMenuActive,
+      toggleMenuActive,
+      handleMenuButtonClick,
       logout,
     };
   },

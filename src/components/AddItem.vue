@@ -72,7 +72,7 @@
             </div>
           </div>
           <div class="column is-full">
-            <button class="button is-link" @click="calculate()">Finish</button>
+            <button class="button is-link" @click="generateFormula()"><i class="pi pi-check"></i></button>
           </div>
         </div>
       </div>
@@ -100,14 +100,8 @@ export default {
       operation: "",
       result: null,
       serviceBulletins: [] as ServiceBulletin[],
-      // serviceBulletins: [
-      //   { service_bulleti_name: "SB-111-111-111" },
-      //   { service_bulleti_name: "SB-111-111-112" },
-      //   { service_bulleti_name: "SB-111-111-113" },
-      //   { service_bulleti_name: "SB-111-111-114" },
-      // ] as ServiceBulletin[],
-      showCalculator: false,
       selectedServiceBulletin: null,
+      showCalculator: false,
     };
   },
   created() {
@@ -170,7 +164,7 @@ export default {
       }
       this.operation += element;
     },
-    calculate: function () {
+    generateFormula: function () {
       const formula = this.operation;
       this.replaceOperators(formula);
     },

@@ -42,7 +42,8 @@ export default {
     const authStore = useAuthStore();
 
     function hasPermission(permission: 'allowed' | 'restrict'): boolean {
-      return authStore.hasPermission(permission);
+      const authorization = sessionStorage.getItem("authorization");
+      return authStore.hasPermission(permission, authorization);
     };
 
     return {

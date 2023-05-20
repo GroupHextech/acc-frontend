@@ -13,6 +13,7 @@ export interface Chassi {
 export interface ServiceBulletin {
   name: string;
   part: string;
+  status: string;
 }
 export interface ItemChassi {
   name_item: string;

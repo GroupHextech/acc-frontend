@@ -99,9 +99,6 @@ export default defineComponent({
               router.push({ name: "chassis" });
             }
           }, 1000);
-        } else {
-          // Authentication failed, display LoginFailed
-          loginFailed.value = true;
         }
       } catch (error: any) {
         // Error handling

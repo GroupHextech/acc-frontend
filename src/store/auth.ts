@@ -7,7 +7,9 @@ export const useAuthStore = defineStore("auth", () => {
   const token: Ref<string | null> = ref(null);
   const user: Ref<string | null> = ref(null);
   const loginFailed: Ref<boolean> = ref(false);
-  const authorization: Ref<string | null> = ref(null);
+  const authorization: Ref<string | null> = ref(
+    sessionStorage.getItem("authorization") || null
+  );
 
   async function login(username: string, password: string): Promise<boolean> {
       try {
@@ -26,9 +28,10 @@ export const useAuthStore = defineStore("auth", () => {
         }
         isAuthenticated.value = true;
         authorization.value = data.auth;
+        sessionStorage.setItem("authorization", authorization.value || "");
         return true
       } catch (ex) {
-        alert("Login failed!");
+        alert("Failed to connect to the server");
         loginFailed.value = true;
         return false
       }
@@ -39,6 +42,7 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = null;
       token.value = null;
       sessionStorage.removeItem('authToken');
+      sessionStorage.removeItem('authorization');
       isAuthenticated.value = false;
       loginFailed.value = false;
       authorization.value = null;
@@ -47,15 +51,17 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  function hasPermission(permission: "allowed" | "restrict"): boolean {
-    if (!authorization.value) {
+  function hasPermission(permission: "allowed" | "restrict", authorization: string | null): boolean {
+    if (!authorization) {
       return false;
     }
   
     if (permission === "allowed") {
-      return authorization.value === "ROLE_EDITOR" || authorization.value === "ROLE_ADM";
+      return (
+        authorization === "ROLE_EDITOR" || 
+        authorization === "ROLE_ADM");
     } else if (permission === "restrict") {
-      return authorization.value === "ROLE_ADM";
+      return authorization === "ROLE_ADM";
     }
   
     return false;
