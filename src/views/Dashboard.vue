@@ -4,7 +4,13 @@
       <div class="hero-body">
         <h1 class="title">Dashboard</h1>
         <section class="hero is-small box">
-          <SBbyStatusChart/>
+          <SBbyStatus/>
+        </section>
+        <section class="hero is-small box">
+          <ChassisByItem/>
+        </section>
+        <section class="hero is-small box">
+          <IncorpItemsByChassi/>
         </section>
       </div>
     </section>
@@ -12,7 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import SBbyStatusChart from '../components/SBbyStatusChart.vue'
+import SBbyStatus from '../components/charts/SBbyStatus.vue'
+import ChassisByItem from '../components/charts/ChassisByItem.vue';
+import IncorpItemsByChassi from '../components/charts/IncorpItemsByChassi.vue';
 </script>
 
 <style scoped>

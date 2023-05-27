@@ -1,20 +1,20 @@
 <template>
   <div>
-    <p class="subtitle is-5">Service Bulletins by Status</p>
+    <p class="subtitle is-5">Chassis that contains 'SB...'</p>
     <div v-if="isLoading">
       <loading />
     </div>
-    <canvas id="myChart" width="400" height="100"></canvas>
+    <canvas id="myChart4" width="400" height="100"></canvas>
   </div>
 </template>
 
 <script lang="js">
-import Chart from 'chart.js/auto'
-import axios from 'axios'
-import Loading from './Loading.vue';
+import Chart from 'chart.js/auto';
+import axios from 'axios';
+import Loading from '../Loading.vue';
 
 export default {
-  name: 'SBbyStatusChart',
+  name: 'ChassisContainsSB',
   props: {
     msg: String
   },
@@ -27,7 +27,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('/chart/sb-by-status')
+    axios.get('/chart/sb-by-status') // To change route
     .then(response => {
       const data = {
         labels: response.data.labels,
@@ -44,7 +44,7 @@ export default {
           }
         },
       };
-      const ctx = document.getElementById('myChart');
+      const ctx = document.getElementById('myChart4');
       const myChart = new Chart(ctx, config);
       myChart;
       this.isLoading = false;

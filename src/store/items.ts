@@ -1,13 +1,21 @@
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-export const useItemsStore = defineStore({
-  id: 'items',
-  state: () => ({
-    selectedItemName: ''
-  }),
-  actions: {
-    setSelectedItemName(name: string) {
-      this.selectedItemName = name;
-    }
+export interface ChartAmountChassisByItem {
+  labels: string[];
+  datasets: {
+    label?: string;
+    backgroundColor?: string;
+    data: number[];
   }
+}
+
+export const useItemsStore = defineStore('items', () => {
+  const selectedItemName = ref("");
+
+  function setSelectedItemName(name: string) {
+    selectedItemName.value = name;
+  }
+
+  return { setSelectedItemName }
 });
