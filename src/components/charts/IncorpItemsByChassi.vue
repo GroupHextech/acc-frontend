@@ -29,7 +29,7 @@ export default {
       datasets: [{
         label: 'Incorporated Items',
         data: [8, 12, 6, 10],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#33D321'],
+        backgroundColor: '#33D321',
       }]
     };
 

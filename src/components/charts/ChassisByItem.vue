@@ -29,7 +29,7 @@ export default {
       datasets: [{
         label: 'Chassis Count',
         data: [25, 18, 12, 30],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#33D321'],
+        backgroundColor: '#FFCE56',
       }]
     };
 

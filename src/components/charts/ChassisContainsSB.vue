@@ -2,7 +2,7 @@
   <div class="chart-section">
     <p class="subtitle is-5">Chassis Contain SBs</p>
     <div>
-      <label for="sbSelect">Select Service Bulletin:</label>
+      <label for="sbSelect">Select Service Bulletin: </label>
       <select id="sbSelect" v-model="selectedSB" @change="updateChart">
         <option disabled value="">Please select</option>
         <option v-for="sb in serviceBulletins" :key="sb.id" :value="sb.id">{{ sb.title }}</option>
@@ -15,7 +15,7 @@
       <canvas ref="chartCanvas"></canvas>
     </div>
     <div v-if="chassisList.length > 0">
-      <p>Chassis containing SB {{ selectedSB }}:</p>
+      <p>Chassis containing SB {{ selectedSB }}: </p>
       <ul>
         <li v-for="chassis in chassisList" :key="chassis">{{ chassis }}</li>
       </ul>
@@ -58,7 +58,7 @@ export default {
         labels: ['Chassis with SB ' + this.selectedSB, 'Chassis without SB ' + this.selectedSB],
         datasets: [{
           data: [8, 22],
-          backgroundColor: ['#FF6384', '#36A2EB'],
+          backgroundColor: ['#36A2EB', '#FF6384'],
         }]
       };
 
