@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="chart-container">
     <p class="subtitle is-5">Service Bulletins by Status</p>
     <div v-if="isLoading">
       <loading />
     </div>
-    <canvas id="myChart" width="400" height="100"></canvas>
+    <canvas id="myChart"></canvas>
   </div>
 </template>
 
@@ -53,3 +53,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.chart-container {
+  max-width: 600px; /* Defina a largura máxima do contêiner do gráfico */
+  width: 100%; /* Ocupa todo o espaço disponível */
+  margin: 0 auto; /* Centraliza o contêiner horizontalmente */
+}
+</style>
