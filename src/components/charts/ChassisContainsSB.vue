@@ -2,11 +2,13 @@
   <div class="chart-section">
     <p class="subtitle is-5">Chassis Contain SBs</p>
     <div>
-      <label for="sbSelect">Select Service Bulletin: </label>
-      <select id="sbSelect" v-model="selectedSB" @change="updateChart">
-        <option disabled value="">Please select</option>
-        <option v-for="sb in serviceBulletins" :key="sb.id" :value="sb.id">{{ sb.title }}</option>
-      </select>
+      <label for="sbSelect" class="label">Select Service Bulletin: </label>
+      <div class="select">
+        <select id="sbSelect" v-model="selectedSB" @change="updateChart">
+          <option disabled value="">Please select</option>
+          <option v-for="sb in serviceBulletins" :key="sb.name" :value="sb.name">{{ sb.name }}</option>
+        </select>
+      </div>
     </div>
     <div v-if="isLoading">
       <Loading />
@@ -26,6 +28,7 @@
 <script lang="js">
 import Chart from 'chart.js/auto'
 import Loading from '../Loading.vue'
+import axios from 'axios'
 
 export default {
   name: 'ChassisContainsSBChart',
@@ -35,21 +38,41 @@ export default {
   data() {
     return {
       isLoading: false,
-      selectedSB: '12345', // Define o ID do Service Bulletin padrão
-      serviceBulletins: [
-        { id: '12345', title: 'SB 12345' },
-        { id: '67890', title: 'SB 67890' },
-        { id: '98765', title: 'SB 98765' }
-      ],
+      selectedSB: 'SB FAT-00-CG18', // Define o ID do Service Bulletin padrão
+      serviceBulletins: [],
       chart: null, // Propriedade para armazenar a instância do gráfico
       chassisList: [], // Array para armazenar a lista de chassis
     }
+  },
+  created() {
+    this.loadData();
   },
   mounted() {
     // Inicializa o gráfico uma vez na montagem do componente
     this.initializeChart();
   },
   methods: {
+    async loadData() {
+      try {
+        const authToken = sessionStorage.getItem("authToken");
+        const config = {
+          headers: {
+            authorization: authToken,
+          },
+        };
+        const response = await axios.get("/bulletin/list/all", config);
+
+        this.serviceBulletins = response.data.map((bulletin) => {
+          return {
+            // nome do type.ts -- nome do endpoint
+            name: bulletin.service_bulletin_name,
+            part: bulletin.service_bulletin_part,
+          };
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
     initializeChart() {
       const ctx = this.$refs.chartCanvas.getContext('2d');
 
