@@ -24,7 +24,7 @@ export interface Permission {
   name: string;
 }
 export interface User {
-  username: string;
+  userUsername: string;
   password: string;
   userType: Permission;
 }

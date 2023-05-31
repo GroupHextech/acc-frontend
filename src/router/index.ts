@@ -8,6 +8,7 @@ import Items from "../views/Items.vue";
 import ItemDetail from "../views/ItemDetail.vue";
 import RegisterChassi from "../views/RegisterChassi.vue";
 import PageNotFound from "../views/PageNotFound.vue";
+import AddChassisToUser from "../views/AddChassisToUser.vue";
 
 // createWebHistory(import.meta.env.BASE_URL),
 
@@ -22,6 +23,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/dashboard", 
     name: "Dashboard",
     component: Dashboard,
+    meta: { requiresAuth: true, redirectIfAuth: false },
+  },
+  {
+    path: "/users",
+    name: "Users",
+    component: AddChassisToUser,
     meta: { requiresAuth: true, redirectIfAuth: false },
   },
   {
