@@ -61,6 +61,12 @@
                 @click="handleMenuButtonClick"
                 >Add chassis</router-link
               >
+              <router-link
+                class="navbar-item"
+                to="/users"
+                @click="handleMenuButtonClick"
+                >Link chassis to Users</router-link
+              >
             </div>
           </div>
           <router-link

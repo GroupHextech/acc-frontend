@@ -72,7 +72,7 @@ export default defineComponent({
   computed: {
     selectedItemName() {
       const itemsStore = useItemsStore();
-      return itemsStore.selectedItemName;
+      return itemsStore.setSelectedItemName;
     },
   },
   methods: {
