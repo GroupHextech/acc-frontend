@@ -34,7 +34,6 @@ export default {
         authorization: authToken,
       },
     };
-    const ctx = document.getElementById('incorpItemsByChassiChart');
     axios.get('/item/contagem', configToken)
       .then(response => {
         const data = response.data;
@@ -60,7 +59,7 @@ export default {
             }
           },
         };
-
+        const ctx = document.getElementById('incorpItemsByChassiChart');
         const chart = new Chart(ctx, config);
         this.chart = chart;
         this.isLoading = false;
