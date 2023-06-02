@@ -4,9 +4,9 @@
     <div>
       <label for="sbSelect" class="label">Select Service Bulletin: </label>
       <div class="select">
-        <select id="sbSelect" v-model="selectedSB" @change="updateChart">
+        <select id="sbSelect" v-model="selectedSBPart" @change="updateChart">
           <option disabled value="">Please select</option>
-          <option v-for="sb in serviceBulletins" :key="sb.name" :value="sb.name">{{ sb.name }}</option>
+          <option v-for="sb in serviceBulletins" :key="sb.name" :value="sb">{{ sb.name }} / {{ sb.part }}</option>
         </select>
       </div>
     </div>
@@ -17,18 +17,18 @@
       <canvas ref="chartCanvas"></canvas>
     </div>
     <div v-if="chassisList.length > 0">
-      <p>Chassis containing SB {{ selectedSB }}: </p>
+      <p>Chassis containing SB {{ selectedSBPart.name }} / {{ selectedSBPart.part }}: </p>
       <ul>
-        <li v-for="chassis in chassisList" :key="chassis">{{ chassis }}</li>
+        <li v-for="chassis in chassisList" :key="chassis">{{ chassis.chassi }}</li>
       </ul>
     </div>
   </div>
 </template>
 
-<script lang="js">
-import Chart from 'chart.js/auto'
-import Loading from '../Loading.vue'
-import axios from 'axios'
+<script>
+import Chart from 'chart.js/auto';
+import Loading from '../Loading.vue';
+import axios from 'axios';
 
 export default {
   name: 'ChassisContainsSBChart',
@@ -38,51 +38,47 @@ export default {
   data() {
     return {
       isLoading: false,
-      selectedSB: 'SB FAT-00-CG18', // Define o ID do Service Bulletin padrão
+      selectedSBPart: '',
       serviceBulletins: [],
-      chart: null, // Propriedade para armazenar a instância do gráfico
-      chassisList: [], // Array para armazenar a lista de chassis
-    }
+      chart: null,
+      chassisList: [],
+    };
   },
   created() {
     this.loadData();
   },
   mounted() {
-    // Inicializa o gráfico uma vez na montagem do componente
     this.initializeChart();
   },
   methods: {
     async loadData() {
       try {
-        const authToken = sessionStorage.getItem("authToken");
+        const authToken = sessionStorage.getItem('authToken');
         const config = {
           headers: {
             authorization: authToken,
           },
         };
-        const response = await axios.get("/bulletin/list/all", config);
+        const response = await axios.get('/bulletin/list/all', config);
 
-        this.serviceBulletins = response.data.map((bulletin) => {
-          return {
-            // nome do type.ts -- nome do endpoint
-            name: bulletin.service_bulletin_name,
-            part: bulletin.service_bulletin_part,
-          };
-        });
+        this.serviceBulletins = response.data.map((bulletin) => ({
+          name: bulletin.service_bulletin_name,
+          part: bulletin.service_bulletin_part,
+        }));
       } catch (error) {
         console.error(error);
       }
     },
     initializeChart() {
       const ctx = this.$refs.chartCanvas.getContext('2d');
-
-      // Mocked data para o gráfico inicial
       const mockedData = {
-        labels: ['Chassis with SB ' + this.selectedSB, 'Chassis without SB ' + this.selectedSB],
-        datasets: [{
-          data: [8, 22],
-          backgroundColor: ['#36A2EB', '#FF6384'],
-        }]
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
 
       const config = {
@@ -97,59 +93,63 @@ export default {
       this.chart = new Chart(ctx, config);
     },
     updateChart() {
-      if (!this.selectedSB) {
+      if (!this.selectedSBPart || !this.$refs.chartCanvas) {
         return;
       }
 
-      this.isLoading = true; // Define isLoading como true antes de buscar os dados ou atualizar o gráfico
+      this.isLoading = true;
 
-      // Simula uma chamada de API com um tempo limite
-      setTimeout(() => {
-        // Mocked data for tests
-        const mockedData = {
-          labels: ['Chassis with SB ' + this.selectedSB, 'Chassis without SB ' + this.selectedSB],
-          datasets: [{
-            data: [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)],
-            backgroundColor: ['#FF6384', '#36A2EB'],
-          }]
-        };
+      const authToken = sessionStorage.getItem('authToken');
+      const configToken = {
+        headers: {
+          authorization: authToken,
+        },
+      };
 
-        if (this.chart) {
-          this.chart.destroy(); // Destrói a instância existente do gráfico antes de criar um novo
-        }
+      const selectedSB = this.selectedSBPart.name;
+      const selectedPart = this.selectedSBPart.part;
 
-        const ctx = this.$refs.chartCanvas.getContext('2d');
+      const url = `/chassi/countchassi/${encodeURIComponent(selectedSB)}/${encodeURIComponent(selectedPart)}`;
 
-        const config = {
-          type: 'pie',
-          data: mockedData,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-          },
-        };
+      axios
+        .get(url, configToken)
+        .then((response) => {
+          const { chassis, count_chassi, serviceBulletin, part } = response.data;
 
-        this.chart = new Chart(ctx, config);
+          const chartData = {
+            labels: [`Chassis with SB ${serviceBulletin} / ${part}`, `Chassis without SB ${serviceBulletin} / ${part}`],
+            datasets: [
+              {
+                data: [count_chassi, chassis.length - count_chassi],
+                backgroundColor: ['#FF6384', '#36A2EB'],
+              },
+            ],
+          };
 
-        this.updateChassisList();
+          if (this.chart) {
+            this.chart.destroy();
+          }
 
-        this.isLoading = false; // Define isLoading como false após atualizar o gráfico
-      }, 1000); // Simulated delay of 1 second
+          
+          const config = {
+            type: 'pie',
+            data: chartData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+            },
+          };
+          
+          const ctx = this.$refs.chartCanvas.getContext('2d');
+          this.chart = new Chart(ctx, config);
+          this.chassisList = chassis;
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.isLoading = false;
+        });
     },
-    updateChassisList() {
-      // Simula uma chamada de API para obter a lista de chassis
-      // com base no SB selecionado
-      setTimeout(() => {
-        // Mocked data para testes
-        const chassisList = [
-          'Chassis A',
-          'Chassis B',
-          'Chassis C'
-        ];
-
-        this.chassisList = chassisList;
-      }, 500); // Simulated delay of 0.5 seconds
-    }
-  }
-}
+  },
+};
 </script>
