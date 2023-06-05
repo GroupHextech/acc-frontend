@@ -120,7 +120,8 @@ export default {
             labels: [`Chassis with SB ${serviceBulletin} / ${part}`, `Chassis without SB ${serviceBulletin} / ${part}`],
             datasets: [
               {
-                data: [count_chassi, chassis.length - count_chassi],
+                //data: [count_chassi, chassis.length - count_chassi],
+                data: [count_chassi, 8],
                 backgroundColor: ['#FF6384', '#36A2EB'],
               },
             ],
