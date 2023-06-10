@@ -9,6 +9,7 @@ export interface Item {
 }
 export interface Chassi {
   chassi_id: number;
+  selected: boolean;
 }
 export interface ServiceBulletin {
   name: string;
@@ -24,6 +25,7 @@ export interface Permission {
   name: string;
 }
 export interface User {
+  userId: number;
   userUsername: string;
   password: string;
   userType: Permission;
