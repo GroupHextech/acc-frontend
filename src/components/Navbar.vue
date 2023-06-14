@@ -42,6 +42,7 @@
             class="navbar-item"
             to="/dashboard"
             @click="handleMenuButtonClick"
+            v-if="hasPermission('restrict')"
             >Dashboard</router-link
           >
           <div
@@ -75,9 +76,9 @@
             @click="handleMenuButtonClick"
             >Items</router-link
           >
-          <a class="navbar-item" @click="handleMenuButtonClick"
+          <!--<a class="navbar-item" @click="handleMenuButtonClick"
             >Service Bulletins</a
-          >
+          >-->
         </div>
 
         <div class="navbar-end" v-bind:class="{ 'is-centered': isMenuActive }">

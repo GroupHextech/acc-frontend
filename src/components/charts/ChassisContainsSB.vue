@@ -114,14 +114,14 @@ export default {
       axios
         .get(url, configToken)
         .then((response) => {
-          const { chassis, count_chassi, serviceBulletin, part } = response.data;
+          const { chassis, count_chassi, serviceBulletin, part, total_chassi } = response.data;
 
           const chartData = {
             labels: [`Chassis with SB ${serviceBulletin} / ${part}`, `Chassis without SB ${serviceBulletin} / ${part}`],
             datasets: [
               {
                 //data: [count_chassi, chassis.length - count_chassi],
-                data: [count_chassi, 8],
+                data: [count_chassi, total_chassi],
                 backgroundColor: ['#FF6384', '#36A2EB'],
               },
             ],

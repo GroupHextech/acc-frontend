@@ -179,7 +179,7 @@ export default defineComponent({
           },
         };
         const response = await axios.get(
-          "/bulletins/listar/" + props.chassi,
+          "/bulletin/listar/" + props.chassi,
           config
         );
         serviceBulletins.value = response.data.map((sb: any) => ({

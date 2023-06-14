@@ -6,9 +6,9 @@
         <section class="hero is-small box">
           <SBbyStatus/>
         </section>
-        <section class="hero is-small box">
+        <!--<section class="hero is-small box">
           <ChassisByItem/>
-        </section>
+        </section>-->
         <section class="hero is-small box">
           <IncorpItemsByChassi/>
         </section>

@@ -16,14 +16,14 @@
               @drop="drop">
               <input type="file" multiple name="file" id="fileInput" class="hidden-input" @change="onChange" ref="file"
                 accept=".csv,.xlsx" />
-  
+
               <label for="fileInput" class="file-label">
                 <div v-if="isDragging" class="file-label-text">Drag files here</div>
                 <div v-else class="file-label-text">
                   Drag files here or <u>click here</u> to upload
                 </div>
               </label>
-  
+
               <div class="preview-container mt-4" v-if="files.length">
                 <div v-for="file in files" :key="file.name" class="preview-card">
                   <div>
@@ -127,13 +127,15 @@ export default {
     sendData() {
       if (this.files.length > 0) {
 
-        this.filesJSON.forEach(data => {
+        this.filesJSON.forEach(async data => {
           const jsonData = JSON.stringify(data);
           console.log(jsonData);
+          const authToken = sessionStorage.getItem("authToken");
           // enviar arquivos para o servidor
-          axios.post('http://localhost:8080/register/bulletin', jsonData, {
+          await axios.post('/register/bulletin', jsonData, {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              authorization: authToken
             }
           });
         });
@@ -240,4 +242,5 @@ export default {
 .preview-img {
   max-width: 100px;
   margin-right: 10px;
-}</style>
+}
+</style>

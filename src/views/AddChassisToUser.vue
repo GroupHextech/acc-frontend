@@ -118,9 +118,14 @@ export default {
           },
         };
 
-        const chassisIds = this.selectedChassis.map(chassis => chassis.chassi_id);
+        const registerDTOs = this.selectedChassis.map(chassis => ({
+          chassi_id: chassis.chassi_id,
+          user_id: this.selectedUser,
+        }));
 
-        await axios.post(`/list/chassi/user/${this.selectedUser}`, chassisIds, config);
+        console.log("List: ", registerDTOs);
+
+        await axios.post("/register/chassi/user", registerDTOs, config);
 
         // Limpa a lista temporária de chassis selecionados
         this.selectedChassis = [];
